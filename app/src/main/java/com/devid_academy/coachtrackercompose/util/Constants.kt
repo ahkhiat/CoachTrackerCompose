@@ -1,6 +1,6 @@
 package com.devid_academy.coachtrackercompose.util
 
-const val SHARED_PREFS = "CoachTracker"
+const val SHARED_PREFS = "CoachTrackerCompose"
 const val TOKEN = "token"
 const val USER_ID = "user_id"
 const val TEAM_ID = "team_id"

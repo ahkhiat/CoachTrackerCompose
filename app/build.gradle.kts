@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    namespace = "com.devid_academy.cochtrackercompose"
+    namespace = "com.devid_academy.coachtrackercompose"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.devid_academy.cochtrackercompose"
+        applicationId = "com.devid_academy.coachtrackercompose"
         minSdk = 25
         targetSdk = 35
         versionCode = 1
@@ -89,6 +89,10 @@ dependencies {
 
     implementation("com.google.dagger:hilt-android:$hiltVersion")
     kapt("com.google.dagger:hilt-android-compiler:$hiltVersion")
+
+    implementation ("androidx.hilt:hilt-navigation-compose:1.0.0")
+//    implementation ("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
 
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.22")

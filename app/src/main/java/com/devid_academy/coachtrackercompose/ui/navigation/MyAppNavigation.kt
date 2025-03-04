@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.devid_academy.coachtrackercompose.ui.screen.auth.LoginScreen
 import com.devid_academy.coachtrackercompose.ui.screen.SplashScreen
+import com.devid_academy.coachtrackercompose.ui.screen.main.MainScreen
 
 @Composable
 fun MyAppNavigation() {
@@ -13,6 +14,7 @@ fun MyAppNavigation() {
 
     NavHost(navController = navController, startDestination = "splash") {
         composable("splash") { SplashScreen(navController) }
-        composable("home") { LoginScreen(navController) }
+        composable("login") { LoginScreen(navController) }
+        composable("main") { MainScreen(navController) }
     }
 }
