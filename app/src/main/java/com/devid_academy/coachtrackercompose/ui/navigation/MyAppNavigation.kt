@@ -13,6 +13,7 @@ import com.devid_academy.coachtrackercompose.ui.screen.auth.RegisterScreen
 import com.devid_academy.coachtrackercompose.ui.screen.splash.SplashScreen
 import com.devid_academy.coachtrackercompose.ui.screen.main.MainScreen
 import com.devid_academy.coachtrackercompose.ui.screen.main.MainViewModel
+import com.devid_academy.coachtrackercompose.ui.screen.profile.ProfileScreen
 import com.devid_academy.coachtrackercompose.ui.screen.profile.ProfileViewModel
 import com.devid_academy.coachtrackercompose.ui.screen.splash.SplashViewModel
 
@@ -38,6 +39,11 @@ fun MyAppNavigation() {
             val authViewModel: AuthViewModel = hiltViewModel()
             MainScreen(navController, authViewModel,mainViewModel, profileViewModel)
         }
+        composable(Screen.Profile.route) {
+            val authViewModel: AuthViewModel = hiltViewModel()
+            val profileViewModel: ProfileViewModel = hiltViewModel()
+            ProfileScreen(authViewModel, profileViewModel)
+        }
     }
 }
 
@@ -46,6 +52,7 @@ sealed class Screen(val route: String) {
     object Main : Screen("main")
     object Login : Screen("login")
     object Register : Screen("register")
+    object Profile: Screen("profile")
 }
 
 

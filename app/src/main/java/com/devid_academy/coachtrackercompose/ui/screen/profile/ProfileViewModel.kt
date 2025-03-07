@@ -24,11 +24,11 @@ class ProfileViewModel @Inject constructor(
     private val preferencesManager: PreferencesManager
 ): ViewModel() {
 
-    private val _isLoading = MutableLiveData(false)
-    val isLoading: LiveData<Boolean> = _isLoading
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
 
-    private val _userLiveData = MutableLiveData<UserProfileDTO>()
-    val userLiveData: LiveData<UserProfileDTO> = _userLiveData
+    private val _userStateFlow = MutableStateFlow(UserProfileDTO())
+    val userStateFlow: StateFlow<UserProfileDTO> = _userStateFlow
 
     private val _teamNameStateFlow = MutableStateFlow<String>("")
     val teamNameStateFlow: StateFlow<String> = _teamNameStateFlow
@@ -39,7 +39,7 @@ class ProfileViewModel @Inject constructor(
 
     fun getUserPofile() {
 
-        _userLiveData.value = preferencesManager.getUser()
+        _userStateFlow.value = preferencesManager.getUser()!!
 
         viewModelScope.launch {
             _isLoading.value = true
@@ -48,7 +48,7 @@ class ProfileViewModel @Inject constructor(
 //                    api.getApi().getUserProfile()
 //                }
                 val result = preferencesManager.getUser()
-                _userLiveData.value = result!!
+                _userStateFlow.value = result!!
                 _teamNameStateFlow.value = (result.isCoachOf?.name ?: result.playsIn?.name).toString()
                 Log.i("VM PROFILE", "VM COACH OU PLAYSIN : ${result.isCoachOf?.name}")
 
