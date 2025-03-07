@@ -76,6 +76,13 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata:1.7.6")
     implementation ("androidx.navigation:navigation-compose:2.7.5")
 
+    val compose_version = "1.6.0"
+
+    implementation ("androidx.compose.ui:ui:$compose_version")
+    implementation ("androidx.compose.material:material:$compose_version")
+    implementation ("androidx.compose.ui:ui-tooling-preview:$compose_version")
+    implementation ("androidx.compose.animation:animation:$compose_version")
+
     implementation ("com.squareup.moshi:moshi-kotlin:1.12.0")
 
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.1")
@@ -96,5 +103,7 @@ dependencies {
 
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.22")
+
+    implementation("androidx.compose.material:material-icons-extended:1.7.8")
 
 }

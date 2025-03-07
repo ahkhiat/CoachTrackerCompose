@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">CoachTrackerCompose</string>
+    <string name="fill_all_inputs">Fill all inputs</string>
 </resources>

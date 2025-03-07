@@ -15,7 +15,6 @@ class AuthManager @Inject constructor(
         with(preferencesManager){
             removeToken()
             clearUser()
-            clearAll()
         }
     }
 

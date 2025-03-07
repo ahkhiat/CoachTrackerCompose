@@ -1,13 +1,11 @@
-package com.devid_academy.coachtrackercompose.ui.screen
+package com.devid_academy.coachtrackercompose.ui.screen.splash
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.devid_academy.coachtrackercompose.R
 import com.devid_academy.coachtrackercompose.data.manager.AuthManager
 import com.devid_academy.coachtrackercompose.data.manager.PreferencesManager
+import com.devid_academy.coachtrackercompose.ui.navigation.LOGIN
+import com.devid_academy.coachtrackercompose.ui.navigation.MAIN
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,9 +35,9 @@ class SplashViewModel @Inject constructor(
             delay(3000)
             _direction.value =
                 if(token.isNullOrEmpty() || !authManager.isTokenValid(token))
-                    "login"
+                    LOGIN
                 else
-                    "main"
+                    MAIN
             _isLoading.value = false
         }
     }
