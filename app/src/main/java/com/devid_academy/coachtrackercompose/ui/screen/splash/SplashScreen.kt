@@ -28,7 +28,11 @@ fun SplashScreen(navController: NavController, splashViewModel: SplashViewModel)
 
     LaunchedEffect(direction) {
         direction?.let{
-            navController.navigate(it)
+            navController.navigate(it) {
+                popUpTo(it) {
+                    inclusive = true
+                }
+            }
         }
     }
 

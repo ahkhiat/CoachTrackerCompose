@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.devid_academy.coachtrackercompose.data.dto.auth.LoginDTO
 import com.devid_academy.coachtrackercompose.data.manager.PreferencesManager
 import com.devid_academy.coachtrackercompose.data.network.ApiService
-import com.devid_academy.coachtrackercompose.ui.navigation.MAIN
+import com.devid_academy.coachtrackercompose.ui.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -57,7 +57,7 @@ class LoginViewModel @Inject constructor(
                             }
                         }
                         _loginState.value = LoginState.Success
-                        _directionStateFlow.value = MAIN
+                        _directionStateFlow.value = Screen.Main.route
                     } else if(response.code() == 401) {
                         _loginState.value = LoginState.Invalid
                         Log.d("RESULT CODE 401", "RESULT CODE 401")

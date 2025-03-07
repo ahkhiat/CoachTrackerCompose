@@ -33,7 +33,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.devid_academy.coachtrackercompose.R
-import com.devid_academy.coachtrackercompose.ui.navigation.REGISTER
+import com.devid_academy.coachtrackercompose.ui.navigation.Screen
 import com.devid_academy.coachtrackercompose.ui.screen.components.InputFormTextField
 import com.devid_academy.coachtrackercompose.util.makeToast
 
@@ -77,7 +77,7 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
             color = Color.Blue,
             textDecoration = TextDecoration.Underline,
             modifier = Modifier.clickable {
-                navController.navigate(REGISTER) // Remplace par ta route
+                navController.navigate(Screen.Register.route) // Remplace par ta route
             }
         )
     }

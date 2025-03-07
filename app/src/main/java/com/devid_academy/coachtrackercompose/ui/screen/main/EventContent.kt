@@ -1,10 +1,13 @@
 package com.devid_academy.coachtrackercompose.ui.screen.main
 
 import android.icu.text.SimpleDateFormat
+import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Companion.End
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -25,16 +28,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.devid_academy.coachtrackercompose.data.dto.AgeCategoryDTO
+import com.devid_academy.coachtrackercompose.data.dto.ClubDTO
+import com.devid_academy.coachtrackercompose.data.dto.ConvocationDTO
 import com.devid_academy.coachtrackercompose.data.dto.EventDTO
+import com.devid_academy.coachtrackercompose.data.dto.EventTypeDTO
+import com.devid_academy.coachtrackercompose.data.dto.PresenceDTO
+import com.devid_academy.coachtrackercompose.data.dto.SeasonDTO
+import com.devid_academy.coachtrackercompose.data.dto.StadiumDTO
+import com.devid_academy.coachtrackercompose.data.dto.TeamDTO
+import com.devid_academy.coachtrackercompose.data.dto.VisitorTeamDTO
 import java.util.Locale
 
 @Composable
-fun EventContent(eventList: List<EventDTO>, modifier: Modifier) {
-    LazyColumn(
-        modifier = modifier
-    ) {
+fun EventContent(eventList: List<EventDTO>) {
+    LazyColumn() {
         items(items = eventList) {
             ItemView(
                 event = it
@@ -42,6 +53,7 @@ fun EventContent(eventList: List<EventDTO>, modifier: Modifier) {
         }
     }
 }
+
 
 
 @Composable
@@ -96,24 +108,30 @@ fun ItemView(event: EventDTO) {
 
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = if (event.eventType.name == "Match")
-                              event.visitorTeam!!.club.name
-                           else
-                              event.eventType.name,
-                    fontSize = if (event.eventType.name == "Match") 18.sp else 14.sp,
+                        event.visitorTeam!!.club.name
+                    else
+                        event.eventType.name,
+                    fontSize = if (event.eventType.name == "Match") 20.sp else 14.sp,
                     fontWeight = if (event.eventType.name == "Match")
-                                    FontWeight.Bold
-                                 else
-                                    FontWeight.Normal
+                        FontWeight.Bold
+                    else
+                        FontWeight.Normal,
+                    modifier = Modifier
+                        .align(Alignment.Start)
+                        .padding(bottom = 10.dp)
                 )
                 Text(
                     text = event.stadium.name,
                     fontSize = 14.sp,
                     fontStyle = FontStyle.Italic,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier
+                        .align(Alignment.End)
+                        .padding(end = 10.dp)
+
                 )
             }
 
@@ -129,4 +147,43 @@ fun ItemView(event: EventDTO) {
         }
     }
 
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewItemView() {
+    val fakeEvent = EventDTO(
+        id = 0,
+        date = "2024-03-07T15:30:00+01:00",
+        eventType = EventTypeDTO(id = 0, name = "Match"),
+        team = TeamDTO(
+            id = 0,
+            name = "U44H1",
+            coaches = emptyList(),
+            players = emptyList()
+        ),
+        visitorTeam = VisitorTeamDTO(
+            id = 0,
+            club = ClubDTO(
+                id = 0,
+                name = "Olympique de Marseille"),
+                ageCategory = AgeCategoryDTO(
+                    name = "U44")),
+        stadium = StadiumDTO(
+            id = 0,
+            name = "Stade Vélodrome",
+            adress = null,
+            postalCode = null,
+            town = null
+        ),
+        season = SeasonDTO(
+            id = 0,
+            name = "2024/2025"
+        ),
+        convocations = emptyList(),
+        presences = emptyList(),
+
+    )
+
+    ItemView(event = fakeEvent)
 }
