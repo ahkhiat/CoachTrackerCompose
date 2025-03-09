@@ -56,6 +56,9 @@ class CreateEventViewModel  @Inject constructor(
         if(eventType != null && stadium != null && season != null && date.isNotEmpty()) {
             viewModelScope.launch {
                 val teamId = pm.getTeamId()
+                Log.i("VM CREATE", "EVENT créée : type: $eventType, date: $date , " +
+                        "équipe: $teamId, lieu: $stadium, saison: $season")
+
                 try {
                     val response = withContext(Dispatchers.IO) {
                         api.getApi().insertEvent(CreateEventDTO(

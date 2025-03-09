@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Event
@@ -24,6 +26,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontStyle
@@ -43,16 +46,33 @@ import com.devid_academy.coachtrackercompose.data.dto.TeamDTO
 import com.devid_academy.coachtrackercompose.data.dto.VisitorTeamDTO
 import java.util.Locale
 
+//@Composable
+//fun EventContent(eventList: List<EventDTO>) {
+//    LazyColumn() {
+//        items(items = eventList) {
+//            ItemView(
+//                event = it
+//            )
+//        }
+//    }
+//}
 @Composable
-fun EventContent(eventList: List<EventDTO>) {
-    LazyColumn() {
-        items(items = eventList) {
+fun EventContent(
+    eventList: List<EventDTO>
+) {
+
+    LazyColumn {
+        items(
+            items = eventList,
+            key = { it.id }
+        ) {
             ItemView(
                 event = it
             )
         }
     }
 }
+
 
 
 

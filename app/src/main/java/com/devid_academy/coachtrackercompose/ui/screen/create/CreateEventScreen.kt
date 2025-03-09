@@ -35,22 +35,42 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
 @Composable
 fun CreateEventScreen(
+    navController: NavController,
     createEventViewModel: CreateEventViewModel
 ) {
     val visitorTeamList by createEventViewModel.visitorTeamList.collectAsState()
     val stadiumList by createEventViewModel.stadiumList.collectAsState()
     val seasonList by createEventViewModel.seasonList.collectAsState()
 
+    val visitorDropdownItems = visitorTeamList.mapNotNull {
+        it.id?.let {
+            id -> DropdownItem(id, it.club.name)
+        }
+    }
+
+    val stadiumDropdownItems = stadiumList.mapNotNull {
+        it.id?.let {
+            id -> DropdownItem(id, it.name)
+        }
+    }
+
+    val seasonDropdownItems = seasonList.mapNotNull {
+        it.id?.let {
+            id -> DropdownItem(id, it.name)
+        }
+    }
+
     CreateEventContent(
-        visitorTeamList = visitorTeamList,
-        stadiumList = stadiumList,
-        seasonList = seasonList,
+        visitorDropdownItems = visitorDropdownItems,
+        stadiumDropdownItems = stadiumDropdownItems,
+        seasonDropdownItems = seasonDropdownItems,
         onCreateEvent = { eventType, date, stadium, season, visitorTeam ->
             createEventViewModel.createEvent(
                 eventType = eventType,
@@ -59,23 +79,29 @@ fun CreateEventScreen(
                 season = season,
                 visitorTeam = visitorTeam
             )
+        },
+        onNavigate = {
+            navController.popBackStack()
         }
     )
 }
 
+
 @Composable
 fun CreateEventContent(
-    visitorTeamList: List<VisitorTeamDTO>,
-    stadiumList: List<StadiumDTO>,
-    seasonList: List<SeasonDTO>,
+    visitorDropdownItems: List<DropdownItem>,
+    stadiumDropdownItems: List<DropdownItem>,
+    seasonDropdownItems: List<DropdownItem>,
     onCreateEvent: (eventType: Int, date: String, stadium: Int,
-                    season: Int, visitorTeam: Int) -> Unit
+                    season: Int, visitorTeam: Int) -> Unit,
+    onNavigate: () -> Unit
+
 ) {
     var selectedDate by remember { mutableStateOf("") }
-    var selectedTeam by remember { mutableStateOf<Int?>(null) }
-    var selectedStadium by remember { mutableStateOf<Int?>(null) }
-    var selectedSeason by remember { mutableStateOf<Int?>(null) }
-    var eventType by remember { mutableStateOf(1) } //
+    var selectedTeam by remember { mutableStateOf<DropdownItem?>(null) }
+    var selectedStadium by remember { mutableStateOf<DropdownItem?>(null) }
+    var selectedSeason by remember { mutableStateOf<DropdownItem?>(null) }
+    var eventType by remember { mutableStateOf(1) }
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -86,28 +112,28 @@ fun CreateEventContent(
         )
         Row {
             RadioButton(
-                selected = eventType == 1,
+                selected = eventType == 4,
                 onClick = {
-                    eventType = 1
+                    eventType = 4
                 }
             )
             Text(
                 text = "Entraînement",
                 modifier = Modifier.clickable {
-                    eventType = 1
+                    eventType = 4
                 }
             )
             Spacer(modifier = Modifier.width(16.dp))
             RadioButton(
-                selected = eventType == 2,
+                selected = eventType == 5,
                 onClick = {
-                    eventType = 2
+                    eventType = 5
                 }
             )
             Text(
                 text= "Match",
                 modifier = Modifier.clickable {
-                    eventType = 2
+                    eventType = 5
                 }
             )
         }
@@ -119,30 +145,30 @@ fun CreateEventContent(
                 date -> selectedDate = date
             }
         )
-        if (eventType == 2) {
+        if (eventType == 5) {
             SpinnerDropdown(
-                items = visitorTeamList,
+                items = visitorDropdownItems,
                 selectedItem = selectedTeam,
                 label = "Équipe visiteuse",
                 onItemSelected = {
-//                     selectedTeam = it.id
+                     selectedTeam = it
                 }
             )
         }
         SpinnerDropdown(
-            items = stadiumList,
+            items = stadiumDropdownItems,
             selectedItem = selectedStadium,
             label = "Stade",
             onItemSelected = {
-//                stadium -> selectedStadium = stadium.id
+                selectedStadium = it
             }
         )
         SpinnerDropdown(
-            items = seasonList,
+            items = seasonDropdownItems,
             selectedItem = selectedSeason,
             label = "Saison",
             onItemSelected = {
-//                season -> selectedSeason = season.id
+                selectedSeason = it
             }
         )
         Button(
@@ -150,11 +176,11 @@ fun CreateEventContent(
                     onCreateEvent(
                         eventType,
                         selectedDate,
-                        selectedStadium!!,
-                        selectedSeason!!,
-                        selectedTeam ?: -1
+                        selectedStadium!!.id,
+                        selectedSeason!!.id,
+                        selectedTeam?.id ?: -1
                     )
-
+                onNavigate()
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -177,7 +203,7 @@ fun DatePickerField(
 
     var showDialog by remember { mutableStateOf(false) }
 
-    val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+    val dateFormat = SimpleDateFormat("yyyy/MM/dd", Locale.getDefault())
 
     Box {
         OutlinedTextField(
@@ -211,12 +237,12 @@ fun DatePickerField(
 
 
 @Composable
-fun <T> SpinnerDropdown(
-    items: List<T>,
-    selectedItem: T?,
+fun SpinnerDropdown(
+    items: List<DropdownItem>,
+    selectedItem: DropdownItem?,
     label: String,
-    onItemSelected: (T) -> Unit
-) where T : Any {
+    onItemSelected: (DropdownItem) -> Unit
+) {
     var expanded by remember { mutableStateOf(false) }
 
     Column {
@@ -224,7 +250,7 @@ fun <T> SpinnerDropdown(
 
         Box {
             OutlinedTextField(
-                value = selectedItem?.toString() ?: "",
+                value = selectedItem?.name ?: "",
                 onValueChange = {},
                 label = { Text(label) },
                 readOnly = true,
@@ -254,7 +280,7 @@ fun <T> SpinnerDropdown(
                     DropdownMenuItem(
                         text = {
                             Text(
-                                text = item.toString()
+                                text = item.name
                             )
                         },
                         onClick = {
@@ -268,155 +294,24 @@ fun <T> SpinnerDropdown(
     }
 }
 
+data class DropdownItem(
+    val id: Int,
+    val name: String
+)
 
-
-
-
-//@RequiresApi(Build.VERSION_CODES.O)
-//@Composable
-//fun CreateEventContent(
-//    visitorTeamList: List<VisitorTeamDTO>,
-//    stadiumList: List<StadiumDTO>,
-//    seasonList: List<SeasonDTO>,
-//    onDateSelected: (String) -> Unit,
-//    onTeamSelected: (VisitorTeamDTO) -> Unit,
-//    onStadiumSelected: (StadiumDTO) -> Unit,
-//    onSeasonSelected: (SeasonDTO) -> Unit
-//) {
-//
-//    var selectedDate by remember { mutableStateOf("") }
-//    var showDatePicker by remember { mutableStateOf(false) }
-//
-//    var selectedTeam by remember { mutableStateOf<VisitorTeamDTO?>(null) }
-//    var selectedStadium by remember { mutableStateOf<StadiumDTO?>(null) }
-//    var selectedSeason by remember { mutableStateOf<SeasonDTO?>(null) }
-//    var eventType by remember { mutableStateOf(1) }
-//
-//    Column(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .padding(16.dp),
-//        verticalArrangement = Arrangement.spacedBy(16.dp)
-//    ) {
-//        // 📅 Sélection de la date
-//        OutlinedTextField(
-//            value = selectedDate,
-//            onValueChange = {},
-//            label = { Text("Date du match") },
-//            readOnly = true,
-//            trailingIcon = {
-//                IconButton(onClick = { showDatePicker = true }) {
-//                    Icon(Icons.Default.DateRange, contentDescription = "Sélectionner une date")
-//                }
-//            },
-//            modifier = Modifier.fillMaxWidth()
-//        )
-//
-//        if (showDatePicker) {
-//            val context = LocalContext.current
-//            val calendar = Calendar.getInstance()
-//
-//            DatePickerDialog(
-//                context,
-//                { _, year, month, day ->
-//                    selectedDate = "$day/${month + 1}/$year"
-//                    onDateSelected(selectedDate)
-//                    showDatePicker = false
-//                },
-//                calendar.get(Calendar.YEAR),
-//                calendar.get(Calendar.MONTH),
-//                calendar.get(Calendar.DAY_OF_MONTH)
-//            ).show()
-//        }
-//
-//        // 🔽 Dropdowns (Spinners)
-//        DropdownSelector(
-//            label = "Équipe visiteuse",
-//            items = visitorTeamList,
-//            selectedItem = selectedTeam,
-//            onItemSelected = {
-//                selectedTeam = it
-//                onTeamSelected(it)
-//            },
-//            itemLabel = { it.club.name }
-//        )
-//
-//        DropdownSelector(
-//            label = "Stade",
-//            items = stadiumList,
-//            selectedItem = selectedStadium,
-//            onItemSelected = {
-//                selectedStadium = it
-//                onStadiumSelected(it)
-//            },
-//            itemLabel = { it.name }
-//        )
-//
-//        DropdownSelector(
-//            label = "Saison",
-//            items = seasonList,
-//            selectedItem = selectedSeason,
-//            onItemSelected = {
-//                selectedSeason = it
-//                onSeasonSelected(it)
-//            },
-//            itemLabel = { it.name }
-//        )
-//    }
-//}
-
-//@Composable
-//fun <T> DropdownSelector(
-//    label: String,
-//    items: List<T>,
-//    selectedItem: T?,
-//    onItemSelected: (T) -> Unit,
-//    itemLabel: (T) -> String
-//) {
-//    var expanded by remember { mutableStateOf(false) }
-//
-//    OutlinedTextField(
-//        value = selectedItem?.let { itemLabel(it) } ?: "",
-//        onValueChange = {},
-//        label = { Text(label) },
-//        readOnly = true,
-//        modifier = Modifier.fillMaxWidth(),
-//        trailingIcon = {
-//            IconButton(onClick = { expanded = true }) {
-//                Icon(Icons.Default.ArrowDropDown, contentDescription = "Ouvrir le menu")
-//            }
-//        }
-//    )
-//
-//    DropdownMenu(
-//        expanded = expanded,
-//        onDismissRequest = { expanded = false }
-//    ) {
-//        items.forEach { item ->
-//            DropdownMenuItem(
-//                text = { Text(itemLabel(item)) },
-//                onClick = {
-//                    onItemSelected(item)
-//                    expanded = false
-//                }
-//            )
-//        }
-//    }
-//}
-//
-//
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 fun CreateEventScreenPreview() {
    CreateEventContent(
-       visitorTeamList = emptyList(),
-       stadiumList = emptyList(),
-       seasonList = emptyList(),
+       visitorDropdownItems = emptyList(),
+       stadiumDropdownItems = emptyList(),
+       seasonDropdownItems = emptyList(),
        onCreateEvent = { eventType, date, stadium, season, visitorTeam ->
            // Fake event creation for preview
            println("Event created with: $eventType, $date, $stadium, $season, $visitorTeam")
-       }
+       },
+       onNavigate = {}
    )
 }

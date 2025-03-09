@@ -8,16 +8,10 @@ import kotlinx.parcelize.Parcelize
 data class CreateEventDTO(
 
     val date: String,
-
-    @Json(name = "event_type")
-    val eventType: Int,
-
-    val team: Int,
-
-    @Json(name = "visitor_team")
-    val visitorTeam: Int?,
-
-    val stadium: Int,
-    val season: Int,
+    val eventTypeId: Int,
+    val teamId: Int,
+    val visitorTeamId: Int?,
+    val stadiumId: Int,
+    val seasonId: Int,
 
 ) : Parcelable

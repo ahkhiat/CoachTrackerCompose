@@ -50,7 +50,8 @@ fun MyAppNavigation() {
         }
         composable(
             Screen.Profile.route,
-            enterTransition = { slideInVertically { -it } },
+            enterTransition = {
+                slideInVertically { -it } },
             exitTransition = { slideOutVertically { -it } }
             ) {
                 val authViewModel: AuthViewModel = hiltViewModel()
@@ -59,7 +60,7 @@ fun MyAppNavigation() {
         }
         composable(Screen.CreateEvent.route) {
             val createEventViewModel: CreateEventViewModel = hiltViewModel()
-            CreateEventScreen(createEventViewModel)
+            CreateEventScreen(navController, createEventViewModel)
         }
     }
 }

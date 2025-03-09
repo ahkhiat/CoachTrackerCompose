@@ -41,7 +41,9 @@ fun ProfileScreen(
             authViewModel.logout()
             navController.navigate(Screen.Login.route)
                    },
-        onExit = { navController.popBackStack() }
+        onExit = {
+            navController.popBackStack()
+        }
     )
 }
 @Composable
@@ -106,9 +108,11 @@ fun ProfileScreenContent(
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold)
                 }
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(12.dp))
                 ProfileLine(title = "Email", content = email)
+                Spacer(modifier = Modifier.height(8.dp))
                 ProfileLine(title = "Birthdate", content = birthdate)
+                Spacer(modifier = Modifier.height(8.dp))
                 ProfileLine(title = "Phone", content = phone)
 
             }
@@ -124,7 +128,7 @@ fun ProfileScreenContent(
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(12.dp))
                 Text(
                     text = team,
                     fontSize = 16.sp

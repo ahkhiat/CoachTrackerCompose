@@ -37,7 +37,10 @@ interface ApiInterface {
 
 //    Events
     @GET(ApiRoutes.GET_ALL_EVENTS)
-    suspend fun getAllEvents(@Query("team.name") teamName: String): Response<List<EventDTO>>
+    suspend fun getAllEvents(
+        @Query("team.name") teamName: String,
+        @Query("order[date]") order: String? = "asc"
+    ): Response<List<EventDTO>>
 
 //    @GET(ApiRoutes.GET_EVENT)
 //    fun getEvent(@Path("id") eventId: Int): Call<EventDTO>

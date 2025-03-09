@@ -1,5 +1,6 @@
 package com.devid_academy.coachtrackercompose.ui.screen.main
 
+import android.annotation.SuppressLint
 import android.icu.text.SimpleDateFormat
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -34,6 +36,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -51,6 +54,7 @@ import com.devid_academy.coachtrackercompose.ui.screen.auth.AuthViewModel
 import com.devid_academy.coachtrackercompose.ui.screen.profile.ProfileViewModel
 import java.util.Locale
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
@@ -64,11 +68,14 @@ fun MainScreen(
     val direction by authViewModel.directionStateFlow.collectAsState()
     val teamName by profileViewModel.teamNameStateFlow.collectAsState()
 
-
     LaunchedEffect(direction) {
         direction?.let {
             navController.navigate(it)
         }
+    }
+
+    SideEffect {
+        mainViewModel.getEvents()
     }
 
     Scaffold(
@@ -95,7 +102,8 @@ fun MainScreen(
 
                     ) {
                         Text(
-                            text = "AB",
+                            text = profileViewModel.userStateFlow.value.firstname.first().toString()
+                            + profileViewModel.userStateFlow.value.lastname.first().toString() ,
                             color = Color.Black,
                             fontWeight = FontWeight.Bold,
                             fontSize = 22.sp
@@ -108,11 +116,11 @@ fun MainScreen(
                 )
             )
         },
-        bottomBar = {
-            BottomAppBar {
-                Text("Barre du bas", modifier = Modifier.padding(16.dp))
-            }
-        },
+//        bottomBar = {
+//            BottomAppBar {
+//                Text("Barre du bas", modifier = Modifier.padding(16.dp))
+//            }
+//        },
         floatingActionButton = {
             FloatingActionButton(onClick = {
                 navController.navigate(Screen.CreateEvent.route)
@@ -127,8 +135,8 @@ fun MainScreen(
                     .fillMaxSize()
                     .padding(paddingValues)
             ) {
-                EventContent(eventList = eventList,
-//                    modifier = Modifier.weight(1f)
+                EventContent(
+                    eventList = eventList
                 )
             }
         }
