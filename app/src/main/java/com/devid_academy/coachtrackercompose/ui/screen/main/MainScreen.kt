@@ -2,6 +2,7 @@ package com.devid_academy.coachtrackercompose.ui.screen.main
 
 import android.icu.text.SimpleDateFormat
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -45,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.devid_academy.coachtrackercompose.data.dto.EventDTO
+import com.devid_academy.coachtrackercompose.ui.navigation.Screen
 import com.devid_academy.coachtrackercompose.ui.screen.auth.AuthViewModel
 import com.devid_academy.coachtrackercompose.ui.screen.profile.ProfileViewModel
 import java.util.Locale
@@ -87,6 +89,10 @@ fun MainScreen(
                             .clip(CircleShape)
                             .background(MaterialTheme.colorScheme.onPrimary)
                             .padding(8.dp)
+                            .clickable {
+                                navController.navigate(Screen.Profile.route)
+                            }
+
                     ) {
                         Text(
                             text = "AB",
@@ -108,7 +114,9 @@ fun MainScreen(
             }
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { /* Action */ }) {
+            FloatingActionButton(onClick = {
+                navController.navigate(Screen.CreateEvent.route)
+            }) {
                 Icon(Icons.Default.Add, contentDescription = "Ajouter")
             }
         },

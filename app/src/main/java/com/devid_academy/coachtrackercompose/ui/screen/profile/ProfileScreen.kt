@@ -1,7 +1,10 @@
 package com.devid_academy.coachtrackercompose.ui.screen.profile
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -13,11 +16,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.devid_academy.coachtrackercompose.ui.navigation.Screen
 import com.devid_academy.coachtrackercompose.ui.screen.auth.AuthViewModel
 
 
 @Composable
 fun ProfileScreen(
+    navController: NavController,
     authViewModel: AuthViewModel,
     profileViewModel: ProfileViewModel
 ) {
@@ -31,7 +37,11 @@ fun ProfileScreen(
         birthdate = userStateFlow.birthdate,
         phone = userStateFlow.phone!!,
         team = teamName,
-        onLogout = { authViewModel.logout() }
+        onLogout = {
+            authViewModel.logout()
+            navController.navigate(Screen.Login.route)
+                   },
+        onExit = { navController.popBackStack() }
     )
 }
 @Composable
@@ -42,7 +52,8 @@ fun ProfileScreenContent(
     birthdate: String,
     phone: String,
     team: String,
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
+    onExit : () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -51,6 +62,19 @@ fun ProfileScreenContent(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Box(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Icon(
+                imageVector = Icons.Default.Close,
+                contentDescription = "Fermer",
+                modifier = Modifier
+                    .align(Alignment.CenterStart)
+                    .size(42.dp)
+                    .clickable { onExit() },
+                tint = Color.Black
+            )
+        }
         Card(
             shape = RoundedCornerShape(12.dp),
             colors = CardDefaults.cardColors(
@@ -112,9 +136,22 @@ fun ProfileScreenContent(
             colors = CardDefaults.cardColors(containerColor = Color.Red.copy(alpha = 0.8f)),
             modifier = Modifier.fillMaxWidth()
         ) {
-            Box(modifier = Modifier.padding(16.dp), contentAlignment = Alignment.Center) {
-                Button(onClick = onLogout, colors = ButtonDefaults.buttonColors(containerColor = Color.White)) {
-                    Text(text = "Se déconnecter", color = Color.Red, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            Box(
+                modifier = Modifier.padding(16.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Button(
+                    onClick = {
+                        onLogout()
+                              },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.White)
+                ) {
+                    Text(
+                        text = "Se déconnecter",
+                        color = Color.Red,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
             }
         }    }
@@ -152,7 +189,8 @@ fun ProfileScreenPreview() {
         birthdate = "01/01/1990",
         phone = "0123456789",
         team = "Équipe A",
-        onLogout = {}
+        onLogout = {},
+        onExit = {}
     )
 }
 
