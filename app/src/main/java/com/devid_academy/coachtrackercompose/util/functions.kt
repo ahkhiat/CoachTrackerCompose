@@ -45,3 +45,13 @@ fun makeToast(context: Context ,message: String) {
 //        else -> -1
 //    }
 //}
+
+sealed class AuthEvent {
+    data object NavigateToMainScreen: AuthEvent()
+    data class ShowSnackBar(val resId: Int): AuthEvent()
+}
+
+sealed class EventEvent {
+    data object NavigateToMainScreen: EventEvent()
+    data class ShowSnackBar(val resId: Int): EventEvent()
+}

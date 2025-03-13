@@ -5,6 +5,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -28,11 +29,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.devid_academy.coachtrackercompose.R
+import com.devid_academy.coachtrackercompose.ui.theme.CoachTrackerColor
 
 @Composable
 fun SplashScreen(navController: NavController, splashViewModel: SplashViewModel) {
 
-    val isLoading by splashViewModel.isLoading.collectAsState()
+    val isLoadingFromVM by splashViewModel.isLoading.collectAsState()
 
     LaunchedEffect(true) {
         splashViewModel.goToMainOrLogin.collect { direction ->
@@ -45,16 +47,23 @@ fun SplashScreen(navController: NavController, splashViewModel: SplashViewModel)
             }
         }
     }
+    SplashContent(isLoading = isLoadingFromVM)
+}
 
+@Composable
+fun SplashContent(isLoading: Boolean) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Blue),
+            .background(CoachTrackerColor),
         contentAlignment = Alignment.Center
     ) {
         AnimatedVisibility(
             visible = isLoading,
-            enter = fadeIn(animationSpec = tween(1000)),
+            enter = slideInVertically(
+                initialOffsetY = { - 1000 },
+                animationSpec = tween(1000)
+            ) + fadeIn(animationSpec = tween(1000)),
             exit = fadeOut(animationSpec = tween(700)) + slideOutVertically(
                 animationSpec = tween(700),
                 targetOffsetY = { -400 }
@@ -68,9 +77,5 @@ fun SplashScreen(navController: NavController, splashViewModel: SplashViewModel)
                     .padding(10.dp)
             )
         }
-
     }
-
-
-
 }

@@ -17,11 +17,13 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Event
 import androidx.compose.material.icons.filled.SportsSoccer
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -44,6 +46,7 @@ import com.devid_academy.coachtrackercompose.data.dto.SeasonDTO
 import com.devid_academy.coachtrackercompose.data.dto.StadiumDTO
 import com.devid_academy.coachtrackercompose.data.dto.TeamDTO
 import com.devid_academy.coachtrackercompose.data.dto.VisitorTeamDTO
+import com.google.accompanist.swiperefresh.SwipeRefresh
 import java.util.Locale
 
 //@Composable
@@ -56,21 +59,37 @@ import java.util.Locale
 //        }
 //    }
 //}
+
+@OptIn(ExperimentalMaterialApi::class)
+@ExperimentalMaterial3Api
 @Composable
 fun EventContent(
-    eventList: List<EventDTO>
-) {
+    eventList: List<EventDTO>,
+//    onClick: (EventDTO) -> Unit,
+    ) {
 
-    LazyColumn {
-        items(
-            items = eventList,
-            key = { it.id }
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceEvenly,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            ItemView(
-                event = it
-            )
+            LazyColumn {
+                items(
+                    items = eventList,
+                    key = { it.id }
+                ) {
+                    ItemView(
+                        event = it
+                    )
+                }
+            }
         }
-    }
+
+
+
+
 }
 
 

@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.devid_academy.coachtrackercompose.R
 import com.devid_academy.coachtrackercompose.data.dto.CreateEventDTO
 import com.devid_academy.coachtrackercompose.data.dto.EventDTO
 import com.devid_academy.coachtrackercompose.data.dto.SeasonDTO
@@ -12,9 +13,12 @@ import com.devid_academy.coachtrackercompose.data.dto.StadiumDTO
 import com.devid_academy.coachtrackercompose.data.dto.VisitorTeamDTO
 import com.devid_academy.coachtrackercompose.data.manager.PreferencesManager
 import com.devid_academy.coachtrackercompose.data.network.ApiService
+import com.devid_academy.coachtrackercompose.util.EventEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -39,6 +43,9 @@ class CreateEventViewModel  @Inject constructor(
     private val _seasonList = MutableStateFlow<List<SeasonDTO>>(emptyList())
     val seasonList: StateFlow<List<SeasonDTO>> = _seasonList
 
+    private val _createSharedFlow = MutableSharedFlow<EventEvent?>()
+    val createSharedFlow: SharedFlow<EventEvent?> = _createSharedFlow
+
     init {
         getVisitorTeamList()
         getStadiumList()
@@ -58,7 +65,6 @@ class CreateEventViewModel  @Inject constructor(
                 val teamId = pm.getTeamId()
                 Log.i("VM CREATE", "EVENT créée : type: $eventType, date: $date , " +
                         "équipe: $teamId, lieu: $stadium, saison: $season")
-
                 try {
                     val response = withContext(Dispatchers.IO) {
                         api.getApi().insertEvent(CreateEventDTO(
@@ -66,6 +72,19 @@ class CreateEventViewModel  @Inject constructor(
                             stadium, season
                         ))
                     }
+                    if(response.isSuccessful){
+                        _createSharedFlow.emit(EventEvent.ShowSnackBar(R.string.create_success))
+                        _createSharedFlow.emit(EventEvent.NavigateToMainScreen)
+                    } else when (response.code()) {
+                        400 -> { Log.i("VM LOGIN", "Erreur paramètre")
+                            _createSharedFlow.emit(EventEvent.ShowSnackBar(R.string.error_param))
+                        }
+                        500 -> { Log.i("VM LOGIN", "Erreur 500 Erreur serveur")
+                            _createSharedFlow.emit(EventEvent.ShowSnackBar(R.string.server_error))
+                        }
+
+                    }
+
                 } catch (e: Exception) {
                     Log.e("Error CREATE VM", "Erreur Create VM : ${e.message}")
                 }

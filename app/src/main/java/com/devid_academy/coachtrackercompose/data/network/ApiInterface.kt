@@ -34,12 +34,11 @@ interface ApiInterface {
     @GET(ApiRoutes.GET_USER_PROFILE)
     suspend fun getUserProfile(): UserProfileDTO
 
-
 //    Events
     @GET(ApiRoutes.GET_ALL_EVENTS)
     suspend fun getAllEvents(
         @Query("team.name") teamName: String,
-        @Query("order[date]") order: String? = "asc"
+        @Query("order[date]") order: String? = "DESC"
     ): Response<List<EventDTO>>
 
 //    @GET(ApiRoutes.GET_EVENT)

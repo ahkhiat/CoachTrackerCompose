@@ -33,6 +33,7 @@ class SplashViewModel @Inject constructor(
     fun verifyToken() {
         val token = preferencesManager.getToken()
         viewModelScope.launch {
+            delay(300)
             _isLoading.value = true
             delay(3000)
             _goToMainOrLogin.emit(

@@ -19,8 +19,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -33,9 +37,12 @@ import com.devid_academy.coachtrackercompose.data.dto.StadiumDTO
 import com.devid_academy.coachtrackercompose.data.dto.VisitorTeamDTO
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
+import com.devid_academy.coachtrackercompose.ui.navigation.Screen
+import com.devid_academy.coachtrackercompose.util.EventEvent
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -45,6 +52,10 @@ fun CreateEventScreen(
     navController: NavController,
     createEventViewModel: CreateEventViewModel
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val context = LocalContext.current
+
     val visitorTeamList by createEventViewModel.visitorTeamList.collectAsState()
     val stadiumList by createEventViewModel.stadiumList.collectAsState()
     val seasonList by createEventViewModel.seasonList.collectAsState()
@@ -67,23 +78,50 @@ fun CreateEventScreen(
         }
     }
 
-    CreateEventContent(
-        visitorDropdownItems = visitorDropdownItems,
-        stadiumDropdownItems = stadiumDropdownItems,
-        seasonDropdownItems = seasonDropdownItems,
-        onCreateEvent = { eventType, date, stadium, season, visitorTeam ->
-            createEventViewModel.createEvent(
-                eventType = eventType,
-                date = date,
-                stadium = stadium,
-                season = season,
-                visitorTeam = visitorTeam
-            )
-        },
-        onNavigate = {
-            navController.popBackStack()
+    LaunchedEffect(true) {
+        createEventViewModel.createSharedFlow.collect { event ->
+            when (event) {
+                is EventEvent.NavigateToMainScreen -> {
+                    navController.navigate(Screen.Main.route) {
+                        popUpTo(Screen.CreateEvent.route) {
+                            inclusive = true
+                        }
+                    }
+                }
+                is EventEvent.ShowSnackBar -> {
+                    snackbarHostState.showSnackbar(context.getString(event.resId))
+                }
+                else -> {}
+            }
         }
-    )
+    }
+
+
+    Scaffold(
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        }
+    ) { padding ->
+        Column(modifier = Modifier.padding(padding)) {
+            CreateEventContent(
+                visitorDropdownItems = visitorDropdownItems,
+                stadiumDropdownItems = stadiumDropdownItems,
+                seasonDropdownItems = seasonDropdownItems,
+                onCreateEvent = { eventType, date, stadium, season, visitorTeam ->
+                    createEventViewModel.createEvent(
+                        eventType = eventType,
+                        date = date,
+                        stadium = stadium,
+                        season = season,
+                        visitorTeam = visitorTeam
+                    )
+                },
+                onNavigate = {}
+            )
+        }
+    }
+
+
 }
 
 
@@ -98,10 +136,10 @@ fun CreateEventContent(
 
 ) {
     var selectedDate by remember { mutableStateOf("") }
-    var selectedTeam by remember { mutableStateOf<DropdownItem?>(null) }
-    var selectedStadium by remember { mutableStateOf<DropdownItem?>(null) }
-    var selectedSeason by remember { mutableStateOf<DropdownItem?>(null) }
-    var eventType by remember { mutableStateOf(1) }
+    var selectedTeam by remember { mutableStateOf<DropdownItem?>(visitorDropdownItems.firstOrNull()) }
+    var selectedStadium by remember { mutableStateOf<DropdownItem?>(stadiumDropdownItems.firstOrNull()) }
+    var selectedSeason by remember { mutableStateOf<DropdownItem?>(seasonDropdownItems.firstOrNull()) }
+    var eventType by remember { mutableStateOf(4) }
 
     Column(modifier = Modifier
         .fillMaxSize()

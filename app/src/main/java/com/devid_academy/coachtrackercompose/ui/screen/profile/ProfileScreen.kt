@@ -1,9 +1,12 @@
 package com.devid_academy.coachtrackercompose.ui.screen.profile
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -11,16 +14,19 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.devid_academy.coachtrackercompose.ui.navigation.BottomBar
 import com.devid_academy.coachtrackercompose.ui.navigation.Screen
 import com.devid_academy.coachtrackercompose.ui.screen.auth.AuthViewModel
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
     navController: NavController,
@@ -30,21 +36,83 @@ fun ProfileScreen(
     val teamName by profileViewModel.teamNameStateFlow.collectAsState()
     val userStateFlow by profileViewModel.userStateFlow.collectAsState()
 
-    ProfileScreenContent(
-        firstname = userStateFlow.firstname,
-        lastname = userStateFlow.lastname,
-        email = userStateFlow.email,
-        birthdate = userStateFlow.birthdate,
-        phone = userStateFlow.phone!!,
-        team = teamName,
-        onLogout = {
-            authViewModel.logout()
-            navController.navigate(Screen.Login.route)
-                   },
-        onExit = {
-            navController.popBackStack()
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = "Profile",
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                },
+                actions = {
+//                    Box(
+//                        contentAlignment = Alignment.Center,
+//                        modifier = Modifier
+//                            .size(50.dp)
+//                            .clip(CircleShape)
+//                            .background(MaterialTheme.colorScheme.onPrimary)
+//                            .padding(8.dp)
+//                            .clickable {
+//                                navController.navigate(Screen.Profile.route)
+//                            }
+//
+//                    ) {
+//                        Text(
+//                            text = ""
+////                            profileViewModel.userStateFlow.value.firstname.first().toString()
+////                                    + profileViewModel.userStateFlow.value.lastname.first().toString()
+//                            ,
+//                            color = Color.Black,
+//                            fontWeight = FontWeight.Bold,
+//                            fontSize = 22.sp
+//                        )
+//                    }
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = Color.White
+                )
+            )
+        },
+        bottomBar = {
+            BottomBar(navController = navController)
+        },
+        floatingActionButton = {
+            FloatingActionButton(onClick = {
+                navController.navigate(Screen.CreateEvent.route)
+            }) {
+                Icon(Icons.Default.Add, contentDescription = "Ajouter")
+            }
+        },
+        content = { paddingValues ->
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+            ) {
+                ProfileScreenContent(
+                    firstname = userStateFlow.firstname,
+                    lastname = userStateFlow.lastname,
+                    email = userStateFlow.email,
+                    birthdate = userStateFlow.birthdate,
+                    phone = userStateFlow.phone!!,
+                    team = teamName,
+                    onLogout = {
+                        authViewModel.logout()
+                        navController.navigate(Screen.Login.route)
+                    },
+                    onExit = {
+                        navController.popBackStack()
+                    }
+                )
+            }
         }
     )
+
+
 }
 @Composable
 fun ProfileScreenContent(
@@ -64,19 +132,19 @@ fun ProfileScreenContent(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Box(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Icon(
-                imageVector = Icons.Default.Close,
-                contentDescription = "Fermer",
-                modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .size(42.dp)
-                    .clickable { onExit() },
-                tint = Color.Black
-            )
-        }
+//        Box(
+//            modifier = Modifier.fillMaxWidth()
+//        ) {
+//            Icon(
+//                imageVector = Icons.Default.Close,
+//                contentDescription = "Fermer",
+//                modifier = Modifier
+//                    .align(Alignment.CenterStart)
+//                    .size(42.dp)
+//                    .clickable { onExit() },
+//                tint = Color.Black
+//            )
+//        }
         Card(
             shape = RoundedCornerShape(12.dp),
             colors = CardDefaults.cardColors(

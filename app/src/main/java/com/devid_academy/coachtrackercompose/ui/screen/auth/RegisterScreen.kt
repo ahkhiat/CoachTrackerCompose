@@ -47,14 +47,13 @@ fun RegisterScreen(navController: NavController) {
     var birthdate by remember { mutableStateOf("") }
 
     val loginViewModel: LoginViewModel = hiltViewModel()
-    val direction by loginViewModel.directionStateFlow.collectAsState()
-    val loginState by loginViewModel.loginState.collectAsState()
 
-    LaunchedEffect(direction) {
-        direction?.let{
-            navController.navigate(it)
-        }
-    }
+
+//    LaunchedEffect(direction) {
+//        direction?.let{
+//            navController.navigate(it)
+//        }
+//    }
 
     Column(
         modifier = Modifier

@@ -22,6 +22,8 @@ import com.devid_academy.coachtrackercompose.ui.screen.main.MainViewModel
 import com.devid_academy.coachtrackercompose.ui.screen.profile.ProfileScreen
 import com.devid_academy.coachtrackercompose.ui.screen.profile.ProfileViewModel
 import com.devid_academy.coachtrackercompose.ui.screen.splash.SplashViewModel
+import com.devid_academy.coachtrackercompose.ui.screen.team.TeamScreen
+import com.devid_academy.coachtrackercompose.ui.screen.team.TeamViewModel
 
 @Composable
 fun MyAppNavigation() {
@@ -45,14 +47,13 @@ fun MyAppNavigation() {
         composable(Screen.Main.route) {
             val mainViewModel: MainViewModel = hiltViewModel()
             val authViewModel: AuthViewModel = hiltViewModel()
-            val profileViewModel: ProfileViewModel = hiltViewModel()
-            MainScreen(navController, authViewModel,mainViewModel, profileViewModel)
+            MainScreen(navController, authViewModel,mainViewModel)
         }
         composable(
             Screen.Profile.route,
-            enterTransition = {
-                slideInVertically { -it } },
-            exitTransition = { slideOutVertically { -it } }
+//            enterTransition = {
+//                slideInVertically { -it } },
+//            exitTransition = { slideOutVertically { -it } }
             ) {
                 val authViewModel: AuthViewModel = hiltViewModel()
                 val profileViewModel: ProfileViewModel = hiltViewModel()
@@ -61,6 +62,10 @@ fun MyAppNavigation() {
         composable(Screen.CreateEvent.route) {
             val createEventViewModel: CreateEventViewModel = hiltViewModel()
             CreateEventScreen(navController, createEventViewModel)
+        }
+        composable(Screen.Team.route) {
+            val teamViewModel: TeamViewModel = hiltViewModel()
+            TeamScreen(navController, teamViewModel)
         }
     }
 }
@@ -74,6 +79,7 @@ sealed class Screen(val route: String) {
     object Register : Screen("register")
     object Profile: Screen("profile")
     object CreateEvent: Screen("create_event")
+    object Team: Screen("team")
 }
 
 
