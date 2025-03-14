@@ -41,9 +41,9 @@ interface ApiInterface {
         @Query("order[date]") order: String? = "DESC"
     ): Response<List<EventDTO>>
 
-//    @GET(ApiRoutes.GET_EVENT)
-//    fun getEvent(@Path("id") eventId: Int): Call<EventDTO>
-//
+    @GET(ApiRoutes.GET_EVENT)
+    suspend fun getEvent(@Path("id") eventId: Int): Response <EventDTO>
+
     @POST(ApiRoutes.ADD_EVENT)
     suspend fun insertEvent(@Body event: CreateEventDTO): Response<ResponseCreateDTO>
 

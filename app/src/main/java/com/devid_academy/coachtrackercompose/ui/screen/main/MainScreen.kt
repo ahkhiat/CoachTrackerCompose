@@ -1,6 +1,7 @@
 package com.devid_academy.coachtrackercompose.ui.screen.main
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -23,6 +24,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,6 +35,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.devid_academy.coachtrackercompose.data.dto.EventDTO
 import com.devid_academy.coachtrackercompose.ui.navigation.BottomBar
 import com.devid_academy.coachtrackercompose.ui.navigation.Screen
 import com.devid_academy.coachtrackercompose.ui.screen.auth.AuthViewModel
@@ -46,18 +51,34 @@ fun MainScreen(
 ) {
 
     val eventList by mainViewModel.eventsStateFlow.collectAsState()
-    val direction by authViewModel.directionStateFlow.collectAsState()
+//    val direction by authViewModel.directionStateFlow.collectAsState()
     val teamNameStateFlow by mainViewModel.teamNameStateFlow.collectAsState()
 
-    LaunchedEffect(direction) {
-        direction?.let {
-            navController.navigate(it)
+
+//    LaunchedEffect(direction) {
+//        direction?.let {
+//            navController.navigate(it)
+//        }
+//    }
+
+    LaunchedEffect(true) {
+        mainViewModel.mainSharedFlow.collect { direction ->
+            direction?.let {
+                when {
+                    it == Screen.Login.route -> {
+                        navController.navigate(it) {
+                            popUpTo(Screen.Main.route) {
+                                inclusive = true
+                            }
+                        }
+                    }
+                    it.startsWith("details/") -> {
+                        navController.navigate(it)
+                    }
+                }
+            }
         }
     }
-
-//    SideEffect {
-//        mainViewModel.getEvents()
-//    }
 
     Scaffold(
         topBar = {
@@ -94,7 +115,11 @@ fun MainScreen(
                     .padding(paddingValues)
             ) {
                 EventContent(
-                    eventList = eventList
+                    eventList = eventList,
+                    onClick = {
+                        Log.i("MAIN SCREEN", "Main Nav Event Click : $it")
+                        mainViewModel.navigateToDetails(it.id)
+                    }
                 )
             }
         }

@@ -14,12 +14,9 @@ class AuthViewModel @Inject constructor(
     private val authManager: AuthManager,
 ): ViewModel() {
 
-    private val _directionStateFlow = MutableStateFlow<String?>(null)
-    val directionStateFlow: StateFlow<String?> = _directionStateFlow
 
     fun logout() {
         authManager.logout()
-        _directionStateFlow.value = Screen.Login.route
     }
 
     fun isTokenValid(token: String?): Boolean {

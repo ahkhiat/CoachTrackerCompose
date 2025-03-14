@@ -7,6 +7,7 @@ import com.devid_academy.coachtrackercompose.data.dto.EventDTO
 import com.devid_academy.coachtrackercompose.data.dto.EventTypeDTO
 import com.devid_academy.coachtrackercompose.data.manager.PreferencesManager
 import com.devid_academy.coachtrackercompose.data.network.ApiService
+import com.devid_academy.coachtrackercompose.ui.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -72,6 +73,13 @@ class MainViewModel @Inject constructor(
             }
             _isLoading.value = false
         }
+    }
+
+    fun navigateToDetails(eventId: Int) {
+        viewModelScope.launch {
+            _mainSharedFlow.emit(Screen.Details.route + "/$eventId")
+        }
+
     }
 
 //    fun getEventTypes() {

@@ -31,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,6 +47,7 @@ import com.devid_academy.coachtrackercompose.data.dto.SeasonDTO
 import com.devid_academy.coachtrackercompose.data.dto.StadiumDTO
 import com.devid_academy.coachtrackercompose.data.dto.TeamDTO
 import com.devid_academy.coachtrackercompose.data.dto.VisitorTeamDTO
+import com.devid_academy.coachtrackercompose.ui.theme.EventWithoutConvocationsColor
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import java.util.Locale
 
@@ -65,52 +67,54 @@ import java.util.Locale
 @Composable
 fun EventContent(
     eventList: List<EventDTO>,
-//    onClick: (EventDTO) -> Unit,
+    onClick: (EventDTO) -> Unit
     ) {
 
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.SpaceEvenly,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            LazyColumn {
-                items(
-                    items = eventList,
-                    key = { it.id }
-                ) {
-                    ItemView(
-                        event = it
-                    )
-                }
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.SpaceEvenly,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        LazyColumn {
+            items(
+                items = eventList,
+                key = { it.id }
+            ) { eventDTO ->
+                ItemView(
+                    event = eventDTO,
+                    onClick = { onClick(it) }
+                )
             }
         }
-
-
-
-
+    }
 }
 
 
 
 
 @Composable
-fun ItemView(event: EventDTO) {
+fun ItemView(
+    event: EventDTO,
+    onClick: (EventDTO) -> Unit
+    ) {
 
     val dateString = event.date
     val date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX", Locale.getDefault()).parse(dateString)
 
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
+            containerColor = if(event.hasConvocations == true)MaterialTheme.colorScheme.surface else EventWithoutConvocationsColor,
         ),
         modifier = Modifier
             .width(380.dp)
             .wrapContentHeight()
             .padding(8.dp),
         shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        onClick = {
+            onClick(event)
+        }
     ) {
         Row(
             modifier = Modifier
@@ -219,10 +223,14 @@ fun PreviewItemView() {
             id = 0,
             name = "2024/2025"
         ),
+        hasConvocations = false,
         convocations = emptyList(),
         presences = emptyList(),
 
     )
 
-    ItemView(event = fakeEvent)
+    ItemView(
+        event = fakeEvent,
+        onClick = {}
+        )
 }

@@ -120,10 +120,7 @@ fun CreateEventScreen(
             )
         }
     }
-
-
 }
-
 
 @Composable
 fun CreateEventContent(
@@ -133,7 +130,6 @@ fun CreateEventContent(
     onCreateEvent: (eventType: Int, date: String, stadium: Int,
                     season: Int, visitorTeam: Int) -> Unit,
     onNavigate: () -> Unit
-
 ) {
     var selectedDate by remember { mutableStateOf("") }
     var selectedTeam by remember { mutableStateOf<DropdownItem?>(visitorDropdownItems.firstOrNull()) }

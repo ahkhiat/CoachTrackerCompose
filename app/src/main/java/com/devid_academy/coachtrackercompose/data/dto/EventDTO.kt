@@ -20,6 +20,7 @@ data class EventDTO(
 
     val stadium: StadiumDTO,
     val season: SeasonDTO,
+    val hasConvocations: Boolean?,
     val presences: List<PresenceDTO>?,
     val convocations: List<ConvocationDTO>?
 
