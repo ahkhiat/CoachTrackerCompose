@@ -26,6 +26,9 @@ class DetailsViewModel @Inject constructor(
     private val _detailsSharedFlow = MutableSharedFlow<EventDTO?>()
     val detailsSharedFlow: SharedFlow<EventDTO?> = _detailsSharedFlow
 
+    private val _showButtonCreateConvocationsStateFlow = MutableStateFlow<Boolean>(false)
+    val showButtonCreateConvocationsStateFlow: StateFlow<Boolean> = _showButtonCreateConvocationsStateFlow
+
     fun getEvent(eventId: Int) {
         viewModelScope.launch {
             try {
@@ -36,6 +39,12 @@ class DetailsViewModel @Inject constructor(
                     val result = response.body()
                     Log.i("VM DETAILS", "VM DETAILS result : $result")
                     _eventStateFlow.value = result
+
+                    result?.convocations?.let {
+                        _showButtonCreateConvocationsStateFlow.value = it.isEmpty()
+                    }
+
+
                 } else when (response.code()){
                     500 -> Log.e("VM DETAILS", "VM DETAILS erreur 500")
                 }

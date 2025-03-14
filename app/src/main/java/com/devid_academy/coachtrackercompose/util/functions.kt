@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.navigation.Navigation.findNavController
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 //fun Fragment.navController() = findNavController()
 
@@ -37,6 +39,7 @@ fun <T> Fragment.fillSpinner(liveData: LiveData<List<T>>, spinner: Spinner, getD
 fun makeToast(context: Context ,message: String) {
     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }
+
 
 //fun returnEventTypeInt(selectedResId: Int): Int {
 //    return when (selectedResId) {
