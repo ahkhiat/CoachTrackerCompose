@@ -36,7 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import com.devid_academy.coachtrackercompose.ui.navigation.Screen
-import com.devid_academy.coachtrackercompose.util.EventEvent
+import com.devid_academy.coachtrackercompose.util.ViewModelEvent
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -75,14 +75,14 @@ fun CreateEventScreen(
     LaunchedEffect(true) {
         createEventViewModel.createSharedFlow.collect { event ->
             when (event) {
-                is EventEvent.NavigateToMainScreen -> {
+                is ViewModelEvent.NavigateToMainScreen -> {
                     navController.navigate(Screen.Main.route) {
                         popUpTo(Screen.CreateEvent.route) {
                             inclusive = true
                         }
                     }
                 }
-                is EventEvent.ShowSnackBar -> {
+                is ViewModelEvent.ShowSnackBar -> {
                     snackbarHostState.showSnackbar(context.getString(event.resId))
                 }
                 else -> {}

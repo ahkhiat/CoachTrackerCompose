@@ -5,22 +5,19 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
-import androidx.navigation.Navigation.findNavController
-import java.text.SimpleDateFormat
-import java.util.Locale
+import com.devid_academy.coachtrackercompose.R
 
 //fun Fragment.navController() = findNavController()
 
-//fun getStatus(status: Int): Int {
-//    return when (status) {
-//        0 -> R.string.pending
-//        1 -> R.string.accepted
-//        2 -> R.string.rejected
-//        else -> R.string.status_undefined
-//    }
-//}
+fun Context.getStatus(status: Int): String {
+    return when (status) {
+        0 -> getString(R.string.pending)
+        1 -> getString(R.string.accepted)
+        2 -> getString(R.string.rejected)
+        else -> getString(R.string.status_undefined)
+    }
+}
 
 fun <T> Fragment.fillSpinner(liveData: LiveData<List<T>>, spinner: Spinner, getDisplayText: (T) -> String){
     liveData.observe(viewLifecycleOwner) {
@@ -49,12 +46,7 @@ fun makeToast(context: Context ,message: String) {
 //    }
 //}
 
-sealed class AuthEvent {
-    data object NavigateToMainScreen: AuthEvent()
-    data class ShowSnackBar(val resId: Int): AuthEvent()
-}
-
-sealed class EventEvent {
-    data object NavigateToMainScreen: EventEvent()
-    data class ShowSnackBar(val resId: Int): EventEvent()
+sealed class ViewModelEvent {
+    data object NavigateToMainScreen: ViewModelEvent()
+    data class ShowSnackBar(val resId: Int): ViewModelEvent()
 }

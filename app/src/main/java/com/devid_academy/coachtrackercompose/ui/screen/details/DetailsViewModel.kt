@@ -3,6 +3,7 @@ package com.devid_academy.coachtrackercompose.ui.screen.details
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.devid_academy.coachtrackercompose.data.dto.ConvocationDTO
 import com.devid_academy.coachtrackercompose.data.dto.EventDTO
 import com.devid_academy.coachtrackercompose.data.network.ApiService
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,6 +30,9 @@ class DetailsViewModel @Inject constructor(
     private val _showButtonCreateConvocationsStateFlow = MutableStateFlow<Boolean>(false)
     val showButtonCreateConvocationsStateFlow: StateFlow<Boolean> = _showButtonCreateConvocationsStateFlow
 
+    private val _convocationsListStateFlow = MutableStateFlow<List<ConvocationDTO?>>(emptyList())
+    val convocationsListStateFlow: StateFlow<List<ConvocationDTO?>> = _convocationsListStateFlow
+
     fun getEvent(eventId: Int) {
         viewModelScope.launch {
             try {
@@ -42,6 +46,8 @@ class DetailsViewModel @Inject constructor(
 
                     result?.convocations?.let {
                         _showButtonCreateConvocationsStateFlow.value = it.isEmpty()
+                        _convocationsListStateFlow.value = it
+                        Log.i("VM DETAILS", "Liste convocations : ${convocationsListStateFlow.value}")
                     }
 
 

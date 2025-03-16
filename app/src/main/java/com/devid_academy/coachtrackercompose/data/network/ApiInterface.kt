@@ -1,6 +1,7 @@
 package com.devid_academy.coachtrackercompose.data.network
 
 
+import com.devid_academy.coachtrackercompose.data.dto.CreateConvocationDTO
 import com.devid_academy.coachtrackercompose.data.dto.CreateEventDTO
 import com.devid_academy.coachtrackercompose.data.dto.EventDTO
 import com.devid_academy.coachtrackercompose.data.dto.EventTypeDTO
@@ -13,6 +14,7 @@ import com.devid_academy.coachtrackercompose.data.dto.auth.RegisterDTO
 import com.devid_academy.coachtrackercompose.data.dto.auth.StatusAuthDTO
 import com.devid_academy.coachtrackercompose.data.dto.response.ResponseCreateDTO
 import com.devid_academy.coachtrackercompose.data.dto.UserProfileDTO
+import com.devid_academy.coachtrackercompose.data.dto.response.ResponseCreateConvocationDTO
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
@@ -49,6 +51,9 @@ interface ApiInterface {
 
     @GET(ApiRoutes.GET_EVENT_TYPES)
     suspend fun getEventTypes(): List<EventTypeDTO>
+
+    @POST(ApiRoutes.ADD_CONVOCATION)
+    suspend fun insertConvocation(@Body convocations: CreateConvocationDTO): Response<ResponseCreateConvocationDTO>
 
 
 //    Teams

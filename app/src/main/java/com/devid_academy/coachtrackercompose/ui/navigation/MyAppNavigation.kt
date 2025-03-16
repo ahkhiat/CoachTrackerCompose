@@ -64,10 +64,7 @@ fun MyAppNavigation() {
             val createEventViewModel: CreateEventViewModel = hiltViewModel()
             CreateEventScreen(navController, createEventViewModel)
         }
-        composable(Screen.CreateConvocation.route) {
-            val createConvocationViewModel: CreateConvocationViewModel = hiltViewModel()
-            CreateConvocationScreen(navController, createConvocationViewModel)
-        }
+
         composable(Screen.Team.route) {
             val teamViewModel: TeamViewModel = hiltViewModel()
             TeamScreen(navController, teamViewModel)
@@ -75,10 +72,18 @@ fun MyAppNavigation() {
         composable(
             route = Screen.Details.route + "/{eventId}",
             arguments = listOf(navArgument("eventId") { type = NavType.IntType })
-        ) { navBackStackEntry ->
-            val eventId = navBackStackEntry.arguments?.getInt("eventId") ?: 0
+        ) {
+            val eventId = it.arguments?.getInt("eventId") ?: 0
             val detailsViewModel: DetailsViewModel = hiltViewModel()
             DetailsScreen(navController, detailsViewModel, eventId)
+        }
+        composable(
+            route = Screen.CreateConvocation.route + "/{eventId}",
+            arguments = listOf(navArgument("eventId") { type = NavType.IntType })
+        ) {
+            val eventId = it.arguments?.getInt("eventId") ?: 0
+            val createConvocationViewModel: CreateConvocationViewModel = hiltViewModel()
+            CreateConvocationScreen(navController, createConvocationViewModel, eventId)
         }
     }
 }

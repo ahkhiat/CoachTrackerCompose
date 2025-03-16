@@ -11,4 +11,11 @@
     <string name="error_param">Error param</string>
     <string name="server_error">Server error</string>
     <string name="create_success">Event created</string>
+    <string name="convocations_sended">Convocations sended</string>
+    <string name="player_already_called_up">A player is already called up</string>
+    <string name="invalid_request">Invalid resquest</string>
+    <string name="pending">pending</string>
+    <string name="accepted">accepted</string>
+    <string name="rejected">rejected</string>
+    <string name="status_undefined">undefined status</string>
 </resources>

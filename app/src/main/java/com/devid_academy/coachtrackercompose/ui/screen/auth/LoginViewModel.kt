@@ -1,22 +1,17 @@
 package com.devid_academy.coachtrackercompose.ui.screen.auth
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.devid_academy.coachtrackercompose.R
 import com.devid_academy.coachtrackercompose.data.dto.auth.LoginDTO
 import com.devid_academy.coachtrackercompose.data.manager.PreferencesManager
 import com.devid_academy.coachtrackercompose.data.network.ApiService
-import com.devid_academy.coachtrackercompose.ui.navigation.Screen
-import com.devid_academy.coachtrackercompose.util.AuthEvent
+import com.devid_academy.coachtrackercompose.util.ViewModelEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -28,8 +23,8 @@ class LoginViewModel @Inject constructor(
 ): ViewModel() {
 
 
-    private val _loginSharedFlow = MutableSharedFlow<AuthEvent?>()
-    val loginSharedFlow: SharedFlow<AuthEvent?> = _loginSharedFlow
+    private val _loginSharedFlow = MutableSharedFlow<ViewModelEvent?>()
+    val loginSharedFlow: SharedFlow<ViewModelEvent?> = _loginSharedFlow
 
     fun verifyLogin(email: String, password: String) {
         viewModelScope.launch {
@@ -55,12 +50,12 @@ class LoginViewModel @Inject constructor(
                             teamId?.let {
                                 pm.setTeamId(it)
                             }
-                            _loginSharedFlow.emit(AuthEvent.NavigateToMainScreen)
+                            _loginSharedFlow.emit(ViewModelEvent.NavigateToMainScreen)
                         }
                     } else when (response.code()) {
                         401 -> {
                             Log.d("RESULT CODE 401", "RESULT CODE 401")
-                            _loginSharedFlow.emit(AuthEvent.ShowSnackBar(R.string.invalid_credentials))
+                            _loginSharedFlow.emit(ViewModelEvent.ShowSnackBar(R.string.invalid_credentials))
                         }
 
                     }
@@ -68,7 +63,7 @@ class LoginViewModel @Inject constructor(
                     Log.e("Error LoginVM", "Erreur Login VM : ${e.message}")
                 }
             } else {
-                _loginSharedFlow.emit(AuthEvent.ShowSnackBar(R.string.fill_all_inputs))
+                _loginSharedFlow.emit(ViewModelEvent.ShowSnackBar(R.string.fill_all_inputs))
             }
         }
     }

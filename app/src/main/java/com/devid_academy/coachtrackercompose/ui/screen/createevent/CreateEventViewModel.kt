@@ -12,7 +12,7 @@ import com.devid_academy.coachtrackercompose.data.dto.StadiumDTO
 import com.devid_academy.coachtrackercompose.data.dto.VisitorTeamDTO
 import com.devid_academy.coachtrackercompose.data.manager.PreferencesManager
 import com.devid_academy.coachtrackercompose.data.network.ApiService
-import com.devid_academy.coachtrackercompose.util.EventEvent
+import com.devid_academy.coachtrackercompose.util.ViewModelEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -42,8 +42,8 @@ class CreateEventViewModel  @Inject constructor(
     private val _seasonList = MutableStateFlow<List<SeasonDTO>>(emptyList())
     val seasonList: StateFlow<List<SeasonDTO>> = _seasonList
 
-    private val _createSharedFlow = MutableSharedFlow<EventEvent?>()
-    val createSharedFlow: SharedFlow<EventEvent?> = _createSharedFlow
+    private val _createSharedFlow = MutableSharedFlow<ViewModelEvent?>()
+    val createSharedFlow: SharedFlow<ViewModelEvent?> = _createSharedFlow
 
     init {
         getVisitorTeamList()
@@ -72,14 +72,14 @@ class CreateEventViewModel  @Inject constructor(
                         ))
                     }
                     if(response.isSuccessful){
-                        _createSharedFlow.emit(EventEvent.ShowSnackBar(R.string.create_success))
-                        _createSharedFlow.emit(EventEvent.NavigateToMainScreen)
+                        _createSharedFlow.emit(ViewModelEvent.ShowSnackBar(R.string.create_success))
+                        _createSharedFlow.emit(ViewModelEvent.NavigateToMainScreen)
                     } else when (response.code()) {
                         400 -> { Log.i("VM LOGIN", "Erreur paramètre")
-                            _createSharedFlow.emit(EventEvent.ShowSnackBar(R.string.error_param))
+                            _createSharedFlow.emit(ViewModelEvent.ShowSnackBar(R.string.error_param))
                         }
                         500 -> { Log.i("VM LOGIN", "Erreur 500 Erreur serveur")
-                            _createSharedFlow.emit(EventEvent.ShowSnackBar(R.string.server_error))
+                            _createSharedFlow.emit(ViewModelEvent.ShowSnackBar(R.string.server_error))
                         }
 
                     }

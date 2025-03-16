@@ -15,6 +15,8 @@ object ApiRoutes {
     const val ADD_EVENT = "events/new"
     const val GET_EVENT_TYPES = "event_types"
 
+    const val ADD_CONVOCATION = "convocations/new"
+
     const val GET_TEAM = "teams/{id}"
 
     const val GET_VISITOR_TEAM_LIST = "visitor_teams"

@@ -1,6 +1,7 @@
 package com.devid_academy.coachtrackercompose.ui.screen.details
 
 import DatePattern
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -30,20 +31,25 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.devid_academy.coachtrackercompose.data.dto.ClubDTO
+import com.devid_academy.coachtrackercompose.data.dto.ConvocationDTO
 import com.devid_academy.coachtrackercompose.data.dto.EventDTO
 import com.devid_academy.coachtrackercompose.data.dto.EventTypeDTO
+import com.devid_academy.coachtrackercompose.data.dto.PlayerDTO
 import com.devid_academy.coachtrackercompose.data.dto.SeasonDTO
 import com.devid_academy.coachtrackercompose.data.dto.StadiumDTO
 import com.devid_academy.coachtrackercompose.data.dto.TeamDTO
+import com.devid_academy.coachtrackercompose.data.dto.UserDTO
 import com.devid_academy.coachtrackercompose.data.dto.VisitorTeamDTO
 import com.devid_academy.coachtrackercompose.ui.navigation.Screen
 import com.devid_academy.coachtrackercompose.ui.screen.components.GreenButton
 import com.devid_academy.coachtrackercompose.ui.theme.CoachTrackerColor
+import com.devid_academy.coachtrackercompose.util.getStatus
 import formatDate
 import getPartialDate
 
@@ -57,6 +63,7 @@ fun DetailsScreen(
 )  {
     val eventStateFlow by detailsViewModel.eventStateFlow.collectAsState()
     val showButtonCreate by detailsViewModel.showButtonCreateConvocationsStateFlow.collectAsState()
+    val convocationsList by detailsViewModel.convocationsListStateFlow.collectAsState()
 
     LaunchedEffect(eventId) {
         detailsViewModel.getEvent(eventId)
@@ -65,12 +72,13 @@ fun DetailsScreen(
     eventStateFlow?.let {
         DetailsContent(
             event = it,
+            convocationsList = convocationsList,
             onNavigate = {
                 navController.popBackStack()
             },
             showButtonCreate = showButtonCreate,
             onNavigateToCreateConvocations = {
-                navController.navigate(Screen.CreateConvocation.route)
+                navController.navigate(Screen.CreateConvocation.route + "/$eventId")
             }
         )
     }
@@ -80,10 +88,13 @@ fun DetailsScreen(
 @Composable
 fun DetailsContent(
     event: EventDTO,
+    convocationsList: List<ConvocationDTO?>,
     onNavigate: () -> Unit,
     showButtonCreate: Boolean,
     onNavigateToCreateConvocations: () -> Unit
 ) {
+    val context = LocalContext.current
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -92,7 +103,8 @@ fun DetailsContent(
                         text = getPartialDate(event.date, DatePattern.WeekDay) + " " +
                                 getPartialDate(event.date, DatePattern.Day) + " " +
                                 getPartialDate(event.date, DatePattern.Month)  + " " +
-                                getPartialDate(event.date, DatePattern.Year)
+                                getPartialDate(event.date, DatePattern.Year),
+                        fontWeight = FontWeight.Bold
                     )
                 },
                 navigationIcon = {
@@ -127,6 +139,7 @@ fun DetailsContent(
             ) {
                 Column(
                     modifier = Modifier
+                        .fillMaxWidth()
                         .padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
 
@@ -224,10 +237,40 @@ fun DetailsContent(
                 GreenButton(
                     buttonText = "Convoquer mes joueurs",
                     width = 250,
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
                     onClick = {
                         onNavigateToCreateConvocations()
                     }
                 )
+            } else {
+                Text(
+                    text = "Joueurs convoqués : " + convocationsList.size,
+                    fontSize = 18.sp
+                )
+                Card(
+                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant),
+                    modifier = Modifier
+                        .fillMaxWidth()
+
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .padding(16.dp),
+
+                        ) {
+                        convocationsList.forEach {convocation ->
+                            convocation?.let {
+                                Text(
+                                    text = "${it.player.user.firstname} (${context.getStatus(it.status)})",
+                                    fontSize = 18.sp
+                                )
+                            }
+                        }
+
+                    }
+                }
             }
 
 
@@ -273,12 +316,26 @@ fun PreviewDetailsContent() {
         ),
         presences = emptyList(),
         convocations = emptyList(),
-        hasConvocations = false
+        hasConvocations = true
     )
     DetailsContent(
         event = sampleEvent,
+        convocationsList = listOf(
+            ConvocationDTO(
+                status = 0,
+                player = PlayerDTO(
+                    id = 24,
+                    UserDTO(
+                        id = 52,
+                        firstname = "Marie",
+                        lastname = "Dubois"
+                    ),
+                    playsInTeam = null
+                )
+            )
+        ),
         onNavigate = {},
-        showButtonCreate = true,
+        showButtonCreate = false,
         onNavigateToCreateConvocations = {}
     )
 }

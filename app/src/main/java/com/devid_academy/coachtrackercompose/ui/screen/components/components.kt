@@ -1,6 +1,5 @@
 package com.devid_academy.coachtrackercompose.ui.screen.components
 
-import android.icu.text.ListFormatter
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -36,15 +35,14 @@ fun InputFormTextField(
 
 @Composable
 fun GreenButton(
+    modifier: Modifier = Modifier,
     buttonText: String,
     width: Int = 200,
     onClick: () -> Unit
 ) {
     Button(
-        onClick = {
-            onClick()
-        },
-        modifier = Modifier.width(width.dp),
+        onClick = onClick,
+        modifier = modifier.width(width.dp),
         shape = RoundedCornerShape(5.dp),
         colors = ButtonDefaults.buttonColors(
         containerColor = CoachTrackerColor

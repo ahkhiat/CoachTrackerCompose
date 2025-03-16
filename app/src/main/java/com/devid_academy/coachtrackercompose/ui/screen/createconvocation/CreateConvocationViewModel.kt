@@ -5,12 +5,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.devid_academy.coachtrackercompose.R
+import com.devid_academy.coachtrackercompose.data.dto.CreateConvocationDTO
 import com.devid_academy.coachtrackercompose.data.dto.TeamDTO
 import com.devid_academy.coachtrackercompose.data.manager.PreferencesManager
 import com.devid_academy.coachtrackercompose.data.network.ApiService
+import com.devid_academy.coachtrackercompose.util.ViewModelEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -27,6 +32,9 @@ class CreateConvocationViewModel @Inject constructor(
 
     private val _teamStateFlow = MutableStateFlow<TeamDTO?>(null)
     val teamStateFlow : StateFlow<TeamDTO?> = _teamStateFlow
+
+    private val _createConvocationSharedFlow = MutableSharedFlow<ViewModelEvent?>()
+    val createConvocationSharedFlow:  SharedFlow<ViewModelEvent?> = _createConvocationSharedFlow
 
     init {
         getTeam()
@@ -48,6 +56,31 @@ class CreateConvocationViewModel @Inject constructor(
             }
             _isLoading.value = false
         }
+    }
+
+    fun insertConvocations(eventId: Int, playersList: List<Int>) {
+        viewModelScope.launch {
+            if (playersList.isNotEmpty()) {
+                val response = withContext(Dispatchers.IO) {
+                    api.getApi().insertConvocation(
+                        CreateConvocationDTO(
+                            eventId,
+                            playersList
+                        )
+                    )
+                }
+                if (response.isSuccessful) {
+                    _createConvocationSharedFlow.emit(ViewModelEvent.ShowSnackBar(R.string.convocations_sended) )
+                    _createConvocationSharedFlow.emit(ViewModelEvent.NavigateToMainScreen)
+                } else when (response.code()){
+                    400 -> _createConvocationSharedFlow.emit(ViewModelEvent.ShowSnackBar(R.string.invalid_request))
+                    500 -> _createConvocationSharedFlow.emit(ViewModelEvent.ShowSnackBar(R.string.error_param))
+                }
+
+
+            }
+        }
+
     }
 
 }
