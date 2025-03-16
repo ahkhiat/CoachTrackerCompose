@@ -1,12 +1,7 @@
 package com.devid_academy.coachtrackercompose.ui.navigation
 
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -16,8 +11,10 @@ import com.devid_academy.coachtrackercompose.ui.screen.auth.AuthViewModel
 import com.devid_academy.coachtrackercompose.ui.screen.auth.LoginScreen
 import com.devid_academy.coachtrackercompose.ui.screen.auth.LoginViewModel
 import com.devid_academy.coachtrackercompose.ui.screen.auth.RegisterScreen
-import com.devid_academy.coachtrackercompose.ui.screen.create.CreateEventScreen
-import com.devid_academy.coachtrackercompose.ui.screen.create.CreateEventViewModel
+import com.devid_academy.coachtrackercompose.ui.screen.createconvocation.CreateConvocationScreen
+import com.devid_academy.coachtrackercompose.ui.screen.createconvocation.CreateConvocationViewModel
+import com.devid_academy.coachtrackercompose.ui.screen.createevent.CreateEventScreen
+import com.devid_academy.coachtrackercompose.ui.screen.createevent.CreateEventViewModel
 import com.devid_academy.coachtrackercompose.ui.screen.details.DetailsScreen
 import com.devid_academy.coachtrackercompose.ui.screen.details.DetailsViewModel
 import com.devid_academy.coachtrackercompose.ui.screen.splash.SplashScreen
@@ -67,6 +64,10 @@ fun MyAppNavigation() {
             val createEventViewModel: CreateEventViewModel = hiltViewModel()
             CreateEventScreen(navController, createEventViewModel)
         }
+        composable(Screen.CreateConvocation.route) {
+            val createConvocationViewModel: CreateConvocationViewModel = hiltViewModel()
+            CreateConvocationScreen(navController, createConvocationViewModel)
+        }
         composable(Screen.Team.route) {
             val teamViewModel: TeamViewModel = hiltViewModel()
             TeamScreen(navController, teamViewModel)
@@ -93,6 +94,7 @@ sealed class Screen(val route: String) {
     object CreateEvent: Screen("create_event")
     object Team: Screen("team")
     object Details: Screen("details")
+    object CreateConvocation: Screen("create_convocation")
 }
 
 

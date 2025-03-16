@@ -1,4 +1,4 @@
-package com.devid_academy.coachtrackercompose.ui.screen.create
+package com.devid_academy.coachtrackercompose.ui.screen.createevent
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.devid_academy.coachtrackercompose.R
 import com.devid_academy.coachtrackercompose.data.dto.CreateEventDTO
-import com.devid_academy.coachtrackercompose.data.dto.EventDTO
 import com.devid_academy.coachtrackercompose.data.dto.SeasonDTO
 import com.devid_academy.coachtrackercompose.data.dto.StadiumDTO
 import com.devid_academy.coachtrackercompose.data.dto.VisitorTeamDTO

@@ -41,6 +41,8 @@ import com.devid_academy.coachtrackercompose.data.dto.SeasonDTO
 import com.devid_academy.coachtrackercompose.data.dto.StadiumDTO
 import com.devid_academy.coachtrackercompose.data.dto.TeamDTO
 import com.devid_academy.coachtrackercompose.data.dto.VisitorTeamDTO
+import com.devid_academy.coachtrackercompose.ui.navigation.Screen
+import com.devid_academy.coachtrackercompose.ui.screen.components.GreenButton
 import com.devid_academy.coachtrackercompose.ui.theme.CoachTrackerColor
 import formatDate
 import getPartialDate
@@ -68,7 +70,7 @@ fun DetailsScreen(
             },
             showButtonCreate = showButtonCreate,
             onNavigateToCreateConvocations = {
-
+                navController.navigate(Screen.CreateConvocation.route)
             }
         )
     }
@@ -219,11 +221,13 @@ fun DetailsContent(
             Spacer(modifier = Modifier.height(20.dp))
 
             if (showButtonCreate) {
-                Button(onClick = {
-                    onNavigateToCreateConvocations
-                }) {
-                    Text(text = "Convoquer mes joueurs")
-                }
+                GreenButton(
+                    buttonText = "Convoquer mes joueurs",
+                    width = 250,
+                    onClick = {
+                        onNavigateToCreateConvocations()
+                    }
+                )
             }
 
 
@@ -274,7 +278,7 @@ fun PreviewDetailsContent() {
     DetailsContent(
         event = sampleEvent,
         onNavigate = {},
-        showButtonCreate = false,
+        showButtonCreate = true,
         onNavigateToCreateConvocations = {}
     )
 }
