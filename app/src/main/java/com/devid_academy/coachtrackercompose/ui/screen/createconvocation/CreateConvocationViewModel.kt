@@ -27,9 +27,6 @@ class CreateConvocationViewModel @Inject constructor(
     private val pm: PreferencesManager
 ): ViewModel() {
 
-    private val _isLoading = MutableLiveData(false)
-    val isLoading: LiveData<Boolean> = _isLoading
-
     private val _teamStateFlow = MutableStateFlow<TeamDTO?>(null)
     val teamStateFlow : StateFlow<TeamDTO?> = _teamStateFlow
 
@@ -41,7 +38,6 @@ class CreateConvocationViewModel @Inject constructor(
     }
     fun getTeam() {
         viewModelScope.launch {
-            _isLoading.value = true
             _teamStateFlow.value = null
             val teamId = pm.getTeamId()
             Log.i("CREATE CONV VM", "Team id recuperé dans le PM : $teamId")
@@ -54,7 +50,6 @@ class CreateConvocationViewModel @Inject constructor(
             } catch (e : Exception) {
                 Log.e("CREATE CONV VM", "Erreur API : ${e.message}", e)
             }
-            _isLoading.value = false
         }
     }
 

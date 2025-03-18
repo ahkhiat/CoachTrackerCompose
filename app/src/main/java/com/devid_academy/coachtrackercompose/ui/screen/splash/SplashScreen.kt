@@ -55,7 +55,8 @@ fun SplashContent(isLoading: Boolean) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(CoachTrackerColor),
+//            .background(CoachTrackerColor),
+            .background(Color.Blue),
         contentAlignment = Alignment.Center
     ) {
         AnimatedVisibility(

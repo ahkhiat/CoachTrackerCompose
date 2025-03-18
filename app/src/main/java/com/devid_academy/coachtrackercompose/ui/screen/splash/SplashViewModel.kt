@@ -37,8 +37,10 @@ class SplashViewModel @Inject constructor(
             _isLoading.value = true
             delay(3000)
             _goToMainOrLogin.emit(
-                if(token.isNullOrEmpty() || !authManager.isTokenValid(token))
+                if(token.isNullOrEmpty() || !authManager.isTokenValid(token)) {
+                    authManager.logout()
                     Screen.Login.route
+                }
                 else
                     Screen.Main.route
             )

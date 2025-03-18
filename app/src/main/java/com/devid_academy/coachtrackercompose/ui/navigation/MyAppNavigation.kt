@@ -17,6 +17,8 @@ import com.devid_academy.coachtrackercompose.ui.screen.createevent.CreateEventSc
 import com.devid_academy.coachtrackercompose.ui.screen.createevent.CreateEventViewModel
 import com.devid_academy.coachtrackercompose.ui.screen.details.DetailsScreen
 import com.devid_academy.coachtrackercompose.ui.screen.details.DetailsViewModel
+import com.devid_academy.coachtrackercompose.ui.screen.editconvocation.EditConvocationScreen
+import com.devid_academy.coachtrackercompose.ui.screen.editconvocation.EditConvocationViewModel
 import com.devid_academy.coachtrackercompose.ui.screen.splash.SplashScreen
 import com.devid_academy.coachtrackercompose.ui.screen.main.MainScreen
 import com.devid_academy.coachtrackercompose.ui.screen.main.MainViewModel
@@ -85,6 +87,14 @@ fun MyAppNavigation() {
             val createConvocationViewModel: CreateConvocationViewModel = hiltViewModel()
             CreateConvocationScreen(navController, createConvocationViewModel, eventId)
         }
+        composable(
+            route = Screen.EditConvocation.route + "/{eventId}",
+            arguments = listOf(navArgument("eventId") { type = NavType.IntType })
+        ) {
+            val eventId = it.arguments?.getInt("eventId") ?: 0
+            val editConvocationViewModel: EditConvocationViewModel = hiltViewModel()
+            EditConvocationScreen(navController, editConvocationViewModel, eventId)
+        }
     }
 }
 
@@ -100,6 +110,7 @@ sealed class Screen(val route: String) {
     object Team: Screen("team")
     object Details: Screen("details")
     object CreateConvocation: Screen("create_convocation")
+    object EditConvocation: Screen("edit_convocation")
 }
 
 

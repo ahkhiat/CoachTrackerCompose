@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.devid_academy.coachtrackercompose.R
 import com.devid_academy.coachtrackercompose.ui.navigation.Screen
+import com.devid_academy.coachtrackercompose.ui.screen.components.BlueButton
 import com.devid_academy.coachtrackercompose.ui.screen.components.InputFormTextField
 import com.devid_academy.coachtrackercompose.ui.theme.CoachTrackerColor
 import com.devid_academy.coachtrackercompose.util.ViewModelEvent
@@ -117,23 +118,16 @@ fun LoginContent(
             visualTransformation = true
         )
         Spacer(modifier = Modifier.height(200.dp))
-        Button(
+        BlueButton(
+            buttonText = "Sign in",
             onClick = {
                 onLogin(emailForm, passwordFrom)
             },
             modifier = Modifier
                 .width(160.dp)
                 .height(50.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = CoachTrackerColor,
-                contentColor = Color.White
-            )
-        ) {
-            Text(
-                text = context.getString(R.string.login_btn_login),
-                fontSize = 18.sp
-            )
-        }
+
+        )
         Spacer(modifier = Modifier.height(30.dp))
 
         Text(

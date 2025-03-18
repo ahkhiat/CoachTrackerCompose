@@ -1,8 +1,6 @@
-package com.devid_academy.coachtrackercompose.ui.screen.createconvocation
+package com.devid_academy.coachtrackercompose.ui.screen.editconvocation
 
-import android.annotation.SuppressLint
 import android.util.Log
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -19,8 +17,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -48,31 +44,53 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.devid_academy.coachtrackercompose.data.dto.ConvocationDTO
 import com.devid_academy.coachtrackercompose.data.dto.PlayerDTO
-import com.devid_academy.coachtrackercompose.data.dto.UserDTO
 import com.devid_academy.coachtrackercompose.ui.navigation.BottomBar
 import com.devid_academy.coachtrackercompose.ui.navigation.Screen
 import com.devid_academy.coachtrackercompose.ui.screen.components.BlueButton
+import com.devid_academy.coachtrackercompose.ui.screen.createconvocation.CreateConvocationContent
+import com.devid_academy.coachtrackercompose.ui.screen.createconvocation.CreateConvocationViewModel
+import com.devid_academy.coachtrackercompose.ui.screen.createconvocation.PlayerItem
 import com.devid_academy.coachtrackercompose.util.ViewModelEvent
 
-@SuppressLint("MutableCollectionMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateConvocationScreen(
+fun EditConvocationScreen(
     navController: NavController,
-    createConvocationViewModel: CreateConvocationViewModel,
+    editConvocationViewModel: EditConvocationViewModel,
     eventId: Int
 ) {
-    val teamStateFlow by createConvocationViewModel.teamStateFlow.collectAsState()
+    val teamStateFlow by editConvocationViewModel
+        .teamStateFlow.collectAsState()
+
+//    val selectedPlayers = remember {
+//        mutableStateOf(mutableSetOf<Int>())
+//    }
+    val convocationListStateFlow by editConvocationViewModel
+        .convocationsListStateFlow.collectAsState()
+
+    val convocatedPlayers = convocationListStateFlow?.mapNotNull {
+        it?.player?.id
+    }?.toSet() ?: emptySet()
+
     val selectedPlayers = remember {
-        mutableStateOf(mutableSetOf<Int>())
+        mutableStateOf(convocatedPlayers.toMutableSet())
     }
+
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
 
+    LaunchedEffect(convocationListStateFlow) {
+        selectedPlayers.value = convocatedPlayers.toMutableSet()
+    }
+
+    LaunchedEffect(eventId) {
+        editConvocationViewModel.getEvent(eventId)
+    }
 
     LaunchedEffect(true) {
-        createConvocationViewModel.createConvocationSharedFlow.collect { event ->
+        editConvocationViewModel.editConvocationSharedFlow.collect { event ->
             when (event) {
                 is ViewModelEvent.NavigateToMainScreen -> {
 //                    navController.navigate(Screen.Main.route) {
@@ -98,7 +116,7 @@ fun CreateConvocationScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = "Convocations",
+                        text = "Modifier convocations",
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -125,13 +143,6 @@ fun CreateConvocationScreen(
         bottomBar = {
             BottomBar(navController = navController)
         },
-        floatingActionButton = {
-            FloatingActionButton(onClick = {
-                navController.navigate(Screen.CreateEvent.route)
-            }) {
-                Icon(Icons.Default.Add, contentDescription = "Ajouter")
-            }
-        },
         content = { paddingValues ->
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -140,13 +151,15 @@ fun CreateConvocationScreen(
                     .padding(paddingValues)
             ) {
                 teamStateFlow?.let {
-                    CreateConvocationContent(
+                    Log.i("EDIT CONVOC SCREEN", "Team : ${it.name}, playersList : ${it.players}")
+
+                    EditConvocationContent(
                         teamName = it.name,
                         playersList = it.players,
                         selectedPlayers = selectedPlayers,
                         onValidate = { playersList ->
                             Log.i("onVALIDATE SCREEN", "Liste : $playersList")
-                            createConvocationViewModel.insertConvocations(eventId, playersList)
+                            editConvocationViewModel.updateConvocations(eventId, playersList)
                         }
                     )
                 }
@@ -155,10 +168,8 @@ fun CreateConvocationScreen(
     )
 }
 
-
-
 @Composable
-fun CreateConvocationContent(
+fun EditConvocationContent(
     teamName: String,
     playersList: List<PlayerDTO>?,
     selectedPlayers: MutableState<MutableSet<Int>>,
@@ -185,7 +196,7 @@ fun CreateConvocationContent(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.Bottom,
 
-        ){
+            ){
             Text(
                 text = "Joueurs convoqués : ${selectedPlayers.value.size}",
                 style = MaterialTheme.typography.titleMedium,
@@ -213,7 +224,7 @@ fun CreateConvocationContent(
                 Text(
                     text = "Tous",
                     color = Color.Black
-                    )
+                )
             }
         }
 
@@ -232,11 +243,13 @@ fun CreateConvocationContent(
                         player,
                         isSelected = selectedPlayers.value.contains(player.id),
                         onClick = {
-                            val updatedSelection = selectedPlayers.value.toMutableSet()
-                            if (!updatedSelection.add(player.id!!)) {
-                                updatedSelection.remove(player.id)
+                            player.id?.let { playerId ->
+                                val updatedSelection = selectedPlayers.value.toMutableSet()
+                                if (!updatedSelection.add(playerId)) {
+                                    updatedSelection.remove(playerId)
+                                }
+                                selectedPlayers.value = updatedSelection.toMutableSet()
                             }
-                            selectedPlayers.value = updatedSelection
                         }
                     )
                 }
@@ -257,68 +270,8 @@ fun CreateConvocationContent(
     }
 }
 
+@Preview
 @Composable
-fun PlayerItem(
-    player: PlayerDTO,
-    isSelected: Boolean,
-    onClick: () -> Unit
-    ) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 2.dp)
-            .clickable { onClick() },
-        shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = if (isSelected) Color.Green else Color.Gray
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = if(isSelected) 0.dp else 2.dp)
-    ) {
-        Column(modifier = Modifier.padding(12.dp)) {
-            Text(
-                text = player.user!!.firstname,
-                style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight.Bold
-            )
-        }
-    }
-}
+fun EditConvocationPreview() {
 
-
-@Preview(showBackground = true)
-@Composable
-fun CreateConvocationPreview() {
-    val players = listOf(
-        PlayerDTO(1, UserDTO(1, "Alice", "Durand"), null),
-        PlayerDTO(2, UserDTO(2, "Emma", "Lemoine"), null),
-        PlayerDTO(3, UserDTO(3, "Lucas", "Morel"), null),
-        PlayerDTO(4, UserDTO(4, "Hugo", "Garcia"), null),
-        PlayerDTO(5, UserDTO(5, "Léa", "Martinez"), null),
-        PlayerDTO(6, UserDTO(6, "Noah", "Bernard"), null),
-        PlayerDTO(7, UserDTO(7, "Chloé", "Dubois"), null),
-        PlayerDTO(8, UserDTO(8, "Nathan", "Robert"), null),
-        PlayerDTO(9, UserDTO(9, "Manon", "Richard"), null),
-        PlayerDTO(10, UserDTO(10, "Tom", "Petit"), null),
-        PlayerDTO(11, UserDTO(11, "Camille", "Lefebvre"), null),
-        PlayerDTO(12, UserDTO(12, "Mathis", "Lemoine"), null),
-        PlayerDTO(13, UserDTO(13, "Juliette", "Simon"), null),
-        PlayerDTO(14, UserDTO(14, "Enzo", "Laurent"), null),
-        PlayerDTO(15, UserDTO(15, "Lina", "Roux"), null)
-    )
-
-//    val coaches = listOf(
-//        CoachDTO(
-//            id = 1,
-//            user = UserDTO(id = 3, firstname = "Sophie", lastname = "Martin")
-//        )
-//    )
-
-    val selectedPlayers = remember { mutableStateOf(mutableSetOf<Int>()) }
-
-    CreateConvocationContent(
-        teamName = "U11F1",
-        playersList = players,
-        selectedPlayers = selectedPlayers,
-        onValidate = {}
-    )
 }

@@ -8,18 +8,19 @@ import com.devid_academy.coachtrackercompose.data.dto.EventTypeDTO
 import com.devid_academy.coachtrackercompose.data.dto.SeasonDTO
 import com.devid_academy.coachtrackercompose.data.dto.StadiumDTO
 import com.devid_academy.coachtrackercompose.data.dto.TeamDTO
+import com.devid_academy.coachtrackercompose.data.dto.UpdateConvocationDTO
 import com.devid_academy.coachtrackercompose.data.dto.VisitorTeamDTO
 import com.devid_academy.coachtrackercompose.data.dto.auth.LoginDTO
 import com.devid_academy.coachtrackercompose.data.dto.auth.RegisterDTO
 import com.devid_academy.coachtrackercompose.data.dto.auth.StatusAuthDTO
 import com.devid_academy.coachtrackercompose.data.dto.response.ResponseCreateDTO
 import com.devid_academy.coachtrackercompose.data.dto.UserProfileDTO
-import com.devid_academy.coachtrackercompose.data.dto.response.ResponseCreateConvocationDTO
-import retrofit2.Call
+import com.devid_academy.coachtrackercompose.data.dto.response.ResponseConvocationDTO
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -53,8 +54,10 @@ interface ApiInterface {
     suspend fun getEventTypes(): List<EventTypeDTO>
 
     @POST(ApiRoutes.ADD_CONVOCATION)
-    suspend fun insertConvocation(@Body convocations: CreateConvocationDTO): Response<ResponseCreateConvocationDTO>
+    suspend fun insertConvocation(@Body convocations: CreateConvocationDTO): Response<ResponseConvocationDTO>
 
+    @PUT(ApiRoutes.UPDATE_CONVOCATION)
+    suspend fun updateConvocation(@Body convocations: UpdateConvocationDTO): Response<ResponseConvocationDTO>
 
 //    Teams
     @GET(ApiRoutes.GET_TEAM)

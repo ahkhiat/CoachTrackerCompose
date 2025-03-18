@@ -18,4 +18,5 @@
     <string name="accepted">accepted</string>
     <string name="rejected">rejected</string>
     <string name="status_undefined">undefined status</string>
+    <string name="convocation_updated">Convocation is updated</string>
 </resources>

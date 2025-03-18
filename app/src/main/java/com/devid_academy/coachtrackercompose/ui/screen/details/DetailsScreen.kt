@@ -1,9 +1,9 @@
 package com.devid_academy.coachtrackercompose.ui.screen.details
 
 import DatePattern
-import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,7 +28,7 @@ import androidx.navigation.NavController
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarColors
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -47,10 +48,8 @@ import com.devid_academy.coachtrackercompose.data.dto.TeamDTO
 import com.devid_academy.coachtrackercompose.data.dto.UserDTO
 import com.devid_academy.coachtrackercompose.data.dto.VisitorTeamDTO
 import com.devid_academy.coachtrackercompose.ui.navigation.Screen
-import com.devid_academy.coachtrackercompose.ui.screen.components.GreenButton
-import com.devid_academy.coachtrackercompose.ui.theme.CoachTrackerColor
+import com.devid_academy.coachtrackercompose.ui.screen.components.BlueButton
 import com.devid_academy.coachtrackercompose.util.getStatus
-import formatDate
 import getPartialDate
 
 
@@ -79,6 +78,9 @@ fun DetailsScreen(
             showButtonCreate = showButtonCreate,
             onNavigateToCreateConvocations = {
                 navController.navigate(Screen.CreateConvocation.route + "/$eventId")
+            },
+            onNavigateToEditConvocation = {
+                navController.navigate(Screen.EditConvocation.route + "/$eventId")
             }
         )
     }
@@ -91,7 +93,8 @@ fun DetailsContent(
     convocationsList: List<ConvocationDTO?>,
     onNavigate: () -> Unit,
     showButtonCreate: Boolean,
-    onNavigateToCreateConvocations: () -> Unit
+    onNavigateToCreateConvocations: () -> Unit,
+    onNavigateToEditConvocation: () -> Unit
 ) {
     val context = LocalContext.current
 
@@ -114,10 +117,13 @@ fun DetailsContent(
                         Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Retour")
                     }
                 },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                containerColor = CoachTrackerColor,
-                titleContentColor = Color.White
-            )
+                colors = TopAppBarColors(
+                    containerColor = Color.Blue,
+                    titleContentColor = Color.White,
+                    actionIconContentColor = Color.White,
+                    navigationIconContentColor = Color.White,
+                    scrolledContainerColor = Color.White
+                )
             )
         }
     ) { paddingValues ->
@@ -234,7 +240,7 @@ fun DetailsContent(
             Spacer(modifier = Modifier.height(20.dp))
 
             if (showButtonCreate) {
-                GreenButton(
+                BlueButton(
                     buttonText = "Convoquer mes joueurs",
                     width = 250,
                     modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -243,10 +249,34 @@ fun DetailsContent(
                     }
                 )
             } else {
-                Text(
-                    text = "Joueurs convoqués : " + convocationsList.size,
-                    fontSize = 18.sp
-                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 20.dp)
+                    ,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = "Joueurs convoqués : " + convocationsList.size,
+                        fontSize = 18.sp
+                    )
+                    Button(
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.LightGray
+                        ),
+                        shape = RoundedCornerShape(5.dp),
+                        onClick = {
+                            onNavigateToEditConvocation()
+                        }
+                    ) {
+                        Text(
+                            text = "Modifier",
+                            color = Color.Black
+                        )
+                    }
+
+                }
                 Card(
                     shape = RoundedCornerShape(12.dp),
                     colors = CardDefaults.cardColors(
@@ -336,6 +366,7 @@ fun PreviewDetailsContent() {
         ),
         onNavigate = {},
         showButtonCreate = false,
-        onNavigateToCreateConvocations = {}
+        onNavigateToCreateConvocations = {},
+        onNavigateToEditConvocation = {}
     )
 }

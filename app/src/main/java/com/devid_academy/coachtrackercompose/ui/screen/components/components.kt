@@ -34,7 +34,7 @@ fun InputFormTextField(
 }
 
 @Composable
-fun GreenButton(
+fun BlueButton(
     modifier: Modifier = Modifier,
     buttonText: String,
     width: Int = 200,
@@ -45,7 +45,7 @@ fun GreenButton(
         modifier = modifier.width(width.dp),
         shape = RoundedCornerShape(5.dp),
         colors = ButtonDefaults.buttonColors(
-        containerColor = CoachTrackerColor
+        containerColor = Color.Blue
         )
         ) {
             Text(

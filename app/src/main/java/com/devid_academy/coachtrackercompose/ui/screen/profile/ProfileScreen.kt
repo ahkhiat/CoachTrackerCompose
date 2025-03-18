@@ -70,9 +70,12 @@ fun ProfileScreen(
 //                        )
 //                    }
                 },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = Color.White
+                colors = TopAppBarColors(
+                    containerColor = Color.Blue,
+                    titleContentColor = Color.White,
+                    actionIconContentColor = Color.White,
+                    navigationIconContentColor = Color.White,
+                    scrolledContainerColor = Color.White
                 )
             )
         },
