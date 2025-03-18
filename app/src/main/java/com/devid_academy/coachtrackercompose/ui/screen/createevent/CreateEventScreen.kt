@@ -1,7 +1,9 @@
 package com.devid_academy.coachtrackercompose.ui.screen.createevent
 
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -240,6 +242,18 @@ fun CreateEventContent(
         )
         Button(
             onClick = {
+                if (selectedDate.isNullOrBlank()) {
+                    Log.e("CreateEvent", "Erreur : aucune date sélectionnée")
+                    return@Button
+                }
+               selectedStadium?.id ?: run {
+                    Log.e("CreateEvent", "Erreur : aucun stade sélectionné")
+                    return@Button
+                }
+               selectedSeason?.id ?: run {
+                    Log.e("CreateEvent", "Erreur : aucune saison sélectionnée")
+                    return@Button
+                }
                     onCreateEvent(
                         eventType,
                         selectedDate,
@@ -270,7 +284,7 @@ fun DatePickerField(
 
     var showDialog by remember { mutableStateOf(false) }
 
-    val dateFormat = SimpleDateFormat("yyyy/MM/dd", Locale.getDefault())
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
 
     Box {
         OutlinedTextField(
@@ -285,14 +299,41 @@ fun DatePickerField(
             },
             modifier = Modifier.fillMaxWidth()
         )
+//        if (showDialog) {
+//            DatePickerDialog(
+//                context,
+//                { _, year, month, dayOfMonth ->
+//                    val selectedCalendar = Calendar.getInstance()
+//                    selectedCalendar.set(year, month, dayOfMonth)
+//                    onDateSelected(dateFormat.format(selectedCalendar.time))
+//                    showDialog = false
+//                },
+//                calendar.get(Calendar.YEAR),
+//                calendar.get(Calendar.MONTH),
+//                calendar.get(Calendar.DAY_OF_MONTH)
+//            ).show()
+//        }
         if (showDialog) {
             DatePickerDialog(
                 context,
                 { _, year, month, dayOfMonth ->
                     val selectedCalendar = Calendar.getInstance()
                     selectedCalendar.set(year, month, dayOfMonth)
-                    onDateSelected(dateFormat.format(selectedCalendar.time))
-                    showDialog = false
+
+                    TimePickerDialog(
+                        context,
+                        { _, hourOfDay, minute ->
+                            selectedCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
+                            selectedCalendar.set(Calendar.MINUTE, minute)
+
+                            onDateSelected(dateFormat.format(selectedCalendar.time))
+
+                            showDialog = false
+                        },
+                        selectedCalendar.get(Calendar.HOUR_OF_DAY),
+                        selectedCalendar.get(Calendar.MINUTE),
+                        true // Format 24h
+                    ).show()
                 },
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),

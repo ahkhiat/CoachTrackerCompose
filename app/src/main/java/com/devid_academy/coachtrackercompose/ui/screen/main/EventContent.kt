@@ -49,6 +49,7 @@ import com.devid_academy.coachtrackercompose.data.dto.TeamDTO
 import com.devid_academy.coachtrackercompose.data.dto.VisitorTeamDTO
 import com.devid_academy.coachtrackercompose.ui.theme.EventWithoutConvocationsColor
 import com.google.accompanist.swiperefresh.SwipeRefresh
+import getPartialDate
 import java.util.Locale
 
 //@Composable
@@ -98,10 +99,6 @@ fun ItemView(
     event: EventDTO,
     onClick: (EventDTO) -> Unit
     ) {
-
-    val dateString = event.date
-    val date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX", Locale.getDefault()).parse(dateString)
-
     Card(
         colors = CardDefaults.cardColors(
             containerColor = if(event.hasConvocations == true)MaterialTheme.colorScheme.surface else EventWithoutConvocationsColor,
@@ -128,24 +125,22 @@ fun ItemView(
                 modifier = Modifier.width(80.dp)
             ) {
                 Text(
-                    text = SimpleDateFormat("EEEE", Locale.getDefault()).format(date),
+                    text = getPartialDate(event.date, DatePattern.WeekDay),
                     fontSize = 10.sp,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
                 )
                 Text(
-                    text = SimpleDateFormat("dd", Locale.getDefault()).format(date),
+                    text = getPartialDate(event.date, DatePattern.Day),
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = SimpleDateFormat("MMM", Locale.getDefault()).format(date),
+                    text = getPartialDate(event.date, DatePattern.Month),
                     fontSize = 14.sp
                 )
                 Text(
-                    text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(date),
+                    text = getPartialDate(event.date, DatePattern.Hour),
                     fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 

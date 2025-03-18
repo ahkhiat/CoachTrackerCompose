@@ -59,26 +59,34 @@ class CreateEventViewModel  @Inject constructor(
         visitorTeam: Int
     ) {
         //team ID
-        if(eventType != null && stadium != null && season != null && date.isNotEmpty()) {
-            viewModelScope.launch {
+        viewModelScope.launch {
+
+            if (eventType != null && stadium != null && season != null && !date.isNullOrBlank()) {
                 val teamId = pm.getTeamId()
-                Log.i("VM CREATE", "EVENT créée : type: $eventType, date: $date , " +
-                        "équipe: $teamId, lieu: $stadium, saison: $season")
+                Log.i(
+                    "VM CREATE", "EVENT créée : type: $eventType, date: $date , " +
+                            "équipe: $teamId, lieu: $stadium, saison: $season"
+                )
                 try {
                     val response = withContext(Dispatchers.IO) {
-                        api.getApi().insertEvent(CreateEventDTO(
-                            date, eventType, teamId, visitorTeam,
-                            stadium, season
-                        ))
+                        api.getApi().insertEvent(
+                            CreateEventDTO(
+                                date, eventType, teamId, visitorTeam,
+                                stadium, season
+                            )
+                        )
                     }
-                    if(response.isSuccessful){
+                    if (response.isSuccessful) {
                         _createSharedFlow.emit(ViewModelEvent.ShowSnackBar(R.string.create_success))
                         _createSharedFlow.emit(ViewModelEvent.NavigateToMainScreen)
                     } else when (response.code()) {
-                        400 -> { Log.i("VM LOGIN", "Erreur paramètre")
+                        400 -> {
+                            Log.i("VM LOGIN", "Erreur paramètre")
                             _createSharedFlow.emit(ViewModelEvent.ShowSnackBar(R.string.error_param))
                         }
-                        500 -> { Log.i("VM LOGIN", "Erreur 500 Erreur serveur")
+
+                        500 -> {
+                            Log.i("VM LOGIN", "Erreur 500 Erreur serveur")
                             _createSharedFlow.emit(ViewModelEvent.ShowSnackBar(R.string.server_error))
                         }
 
@@ -87,10 +95,9 @@ class CreateEventViewModel  @Inject constructor(
                 } catch (e: Exception) {
                     Log.e("Error CREATE VM", "Erreur Create VM : ${e.message}")
                 }
-
+            } else {
+                _createSharedFlow.emit(ViewModelEvent.ShowSnackBar(R.string.fill_all_inputs))
             }
-        } else {
-            // veuillez remplir tous les champs
         }
     }
 
