@@ -86,9 +86,9 @@ class MainViewModel @Inject constructor(
     }
 
 }
-sealed class SessionState {
-    data object Idle : SessionState()
-    data object Checking: SessionState()
-    data object Unauthorized : SessionState()
-    data object Authorized: SessionState()
-}
+//sealed class SessionState {
+//    data object Idle : SessionState()
+//    data object Checking: SessionState()
+//    data object Unauthorized : SessionState()
+//    data object Authorized: SessionState()
+//}

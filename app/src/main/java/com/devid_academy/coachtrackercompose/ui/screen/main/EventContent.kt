@@ -52,17 +52,6 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import getPartialDate
 import java.util.Locale
 
-//@Composable
-//fun EventContent(eventList: List<EventDTO>) {
-//    LazyColumn() {
-//        items(items = eventList) {
-//            ItemView(
-//                event = it
-//            )
-//        }
-//    }
-//}
-
 @OptIn(ExperimentalMaterialApi::class)
 @ExperimentalMaterial3Api
 @Composable

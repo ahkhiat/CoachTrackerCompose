@@ -6,9 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.devid_academy.coachtrackercompose.data.dto.EventDTO
 import com.devid_academy.coachtrackercompose.data.manager.PreferencesManager
 import com.devid_academy.coachtrackercompose.data.network.ApiService
+import com.devid_academy.coachtrackercompose.ui.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -25,6 +28,9 @@ class NotificationViewModel @Inject constructor(
 
     private val _eventWithoutConvocList = MutableStateFlow<List<EventDTO>>(emptyList())
     val eventWithoutConvocList: StateFlow<List<EventDTO>> = _eventWithoutConvocList
+
+    private val _notificationSharedFlow = MutableSharedFlow<String?>()
+    val notificationSharedFlow: SharedFlow<String?> = _notificationSharedFlow
 
     init {
         getEvents()
@@ -64,6 +70,12 @@ class NotificationViewModel @Inject constructor(
             } catch(e: Exception) {
                 Log.e("VM NOTIFS", "Erreur Catch: ${e.message}")
             }
+        }
+    }
+
+    fun navigateToDetails(eventId: Int) {
+        viewModelScope.launch {
+            _notificationSharedFlow.emit(Screen.Details.route + "/$eventId")
         }
     }
 
