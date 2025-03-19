@@ -12,9 +12,16 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.NotificationsNone
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -55,6 +62,8 @@ fun MainScreen(
 //    val direction by authViewModel.directionStateFlow.collectAsState()
     val teamNameStateFlow by mainViewModel.teamNameStateFlow.collectAsState()
 
+    val counterEventWithoutConvocation by mainViewModel
+        .counterEventWithoutConvocation.collectAsState()
 
 //    LaunchedEffect(direction) {
 //        direction?.let {
@@ -90,8 +99,32 @@ fun MainScreen(
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold
                     )
+
                 },
-                actions = {},
+                actions = {
+                    BadgedBox(
+                        badge = {
+                            if (counterEventWithoutConvocation > 0) {
+                                Badge(
+                                    modifier = Modifier.align(Alignment.TopEnd),
+                                    containerColor = Color.Red,
+                                    contentColor = Color.White
+                                ) {
+                                    Text("$counterEventWithoutConvocation")
+                                }
+                            }
+                        }
+                    ) {
+                        IconButton(onClick = {
+                            navController.navigate(Screen.Notification.route)
+                        }) {
+                            Icon(
+                                imageVector = Icons.Filled.Notifications,
+                                contentDescription = "Notification icon",
+                            )
+                        }
+                    }
+                },
                 colors = TopAppBarColors(
                     containerColor = Color.Blue,
                     titleContentColor = Color.White,

@@ -22,6 +22,8 @@ import com.devid_academy.coachtrackercompose.ui.screen.editconvocation.EditConvo
 import com.devid_academy.coachtrackercompose.ui.screen.splash.SplashScreen
 import com.devid_academy.coachtrackercompose.ui.screen.main.MainScreen
 import com.devid_academy.coachtrackercompose.ui.screen.main.MainViewModel
+import com.devid_academy.coachtrackercompose.ui.screen.notification.NotificationScreen
+import com.devid_academy.coachtrackercompose.ui.screen.notification.NotificationViewModel
 import com.devid_academy.coachtrackercompose.ui.screen.profile.ProfileScreen
 import com.devid_academy.coachtrackercompose.ui.screen.profile.ProfileViewModel
 import com.devid_academy.coachtrackercompose.ui.screen.splash.SplashViewModel
@@ -66,10 +68,13 @@ fun MyAppNavigation() {
             val createEventViewModel: CreateEventViewModel = hiltViewModel()
             CreateEventScreen(navController, createEventViewModel)
         }
-
         composable(Screen.Team.route) {
             val teamViewModel: TeamViewModel = hiltViewModel()
             TeamScreen(navController, teamViewModel)
+        }
+        composable(Screen.Notification.route) {
+            val notificationViewModel: NotificationViewModel = hiltViewModel()
+            NotificationScreen(navController, notificationViewModel)
         }
         composable(
             route = Screen.Details.route + "/{eventId}",
@@ -111,6 +116,7 @@ sealed class Screen(val route: String) {
     object Details: Screen("details")
     object CreateConvocation: Screen("create_convocation")
     object EditConvocation: Screen("edit_convocation")
+    object Notification: Screen("notification")
 }
 
 

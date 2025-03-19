@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -108,7 +109,8 @@ fun LoginContent(
         InputFormTextField(
             value = emailForm,
             onValueChange = { emailForm = it },
-            label = context.getString(R.string.login_et_name)
+            label = context.getString(R.string.login_et_name),
+            keyboardType = KeyboardType.Email
         )
         Spacer(modifier = Modifier.height(15.dp))
         InputFormTextField(

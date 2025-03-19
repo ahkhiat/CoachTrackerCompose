@@ -34,6 +34,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -45,6 +46,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.devid_academy.coachtrackercompose.ui.navigation.BottomBar
 import com.devid_academy.coachtrackercompose.ui.navigation.Screen
+import com.devid_academy.coachtrackercompose.ui.screen.components.BlueButton
 import com.devid_academy.coachtrackercompose.util.ViewModelEvent
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -240,37 +242,67 @@ fun CreateEventContent(
                 selectedSeason = it
             }
         )
-        Button(
+        Spacer(modifier = Modifier.height(20.dp))
+        BlueButton(
+            buttonText = "Créer l'événement",
+            width = 250,
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally),
             onClick = {
                 if (selectedDate.isNullOrBlank()) {
                     Log.e("CreateEvent", "Erreur : aucune date sélectionnée")
-                    return@Button
+                    return@BlueButton
                 }
-               selectedStadium?.id ?: run {
+                selectedStadium?.id ?: run {
                     Log.e("CreateEvent", "Erreur : aucun stade sélectionné")
-                    return@Button
+                    return@BlueButton
                 }
-               selectedSeason?.id ?: run {
+                selectedSeason?.id ?: run {
                     Log.e("CreateEvent", "Erreur : aucune saison sélectionnée")
-                    return@Button
+                    return@BlueButton
                 }
-                    onCreateEvent(
-                        eventType,
-                        selectedDate,
-                        selectedStadium!!.id,
-                        selectedSeason!!.id,
-                        selectedTeam?.id ?: -1
-                    )
+                onCreateEvent(
+                    eventType,
+                    selectedDate,
+                    selectedStadium!!.id,
+                    selectedSeason!!.id,
+                    selectedTeam?.id ?: -1
+                )
                 onNavigate()
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp)
-        ) {
-            Text(
-                text= "Créer l'événement"
-            )
-        }
+            }
+        )
+//        Button(
+//            onClick = {
+//                if (selectedDate.isNullOrBlank()) {
+//                    Log.e("CreateEvent", "Erreur : aucune date sélectionnée")
+//                    return@Button
+//                }
+//               selectedStadium?.id ?: run {
+//                    Log.e("CreateEvent", "Erreur : aucun stade sélectionné")
+//                    return@Button
+//                }
+//               selectedSeason?.id ?: run {
+//                    Log.e("CreateEvent", "Erreur : aucune saison sélectionnée")
+//                    return@Button
+//                }
+//                    onCreateEvent(
+//                        eventType,
+//                        selectedDate,
+//                        selectedStadium!!.id,
+//                        selectedSeason!!.id,
+//                        selectedTeam?.id ?: -1
+//                    )
+//                onNavigate()
+//            },
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(top = 16.dp)
+//        ) {
+//            Text(
+//                text= "Créer l'événement"
+//            )
+//        }
+
     }
 }
 
@@ -409,7 +441,7 @@ data class DropdownItem(
 
 
 @RequiresApi(Build.VERSION_CODES.O)
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun CreateEventScreenPreview() {
    CreateEventContent(

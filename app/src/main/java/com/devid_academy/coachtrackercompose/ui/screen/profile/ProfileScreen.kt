@@ -82,13 +82,6 @@ fun ProfileScreen(
         bottomBar = {
             BottomBar(navController = navController)
         },
-        floatingActionButton = {
-            FloatingActionButton(onClick = {
-                navController.navigate(Screen.CreateEvent.route)
-            }) {
-                Icon(Icons.Default.Add, contentDescription = "Ajouter")
-            }
-        },
         content = { paddingValues ->
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,

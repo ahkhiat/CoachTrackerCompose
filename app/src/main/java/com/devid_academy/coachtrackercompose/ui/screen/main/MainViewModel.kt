@@ -27,12 +27,6 @@ class MainViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
-//    private val _sessionState = MutableStateFlow<SessionState>(SessionState.Idle)
-//    val sessionState: StateFlow<SessionState> = _sessionState
-
-//    private val _categories = MutableStateFlow<List<EventTypeDTO>>(emptyList())
-//    val categories: StateFlow<List<EventTypeDTO>> = _categories
-
     private val _teamNameStateFlow = MutableStateFlow<String>("")
     val teamNameStateFlow: StateFlow<String> = _teamNameStateFlow
 
@@ -41,6 +35,9 @@ class MainViewModel @Inject constructor(
 
     private val _mainSharedFlow = MutableSharedFlow<String?>()
     val mainSharedFlow: SharedFlow<String?> = _mainSharedFlow
+
+    private val _counterEventWithoutConvocation = MutableStateFlow<Int>(0)
+    val counterEventWithoutConvocation: StateFlow<Int> = _counterEventWithoutConvocation
 
     init {
         getEvents()
@@ -65,6 +62,13 @@ class MainViewModel @Inject constructor(
                     val result = response.body()
                     Log.i("VM MAIN", "VM MAIN result : $result")
                     _eventsStateFlow.value = result!!
+                    for (event in result) {
+                        Log.i("EVENT FOR", "EVENT : $event")
+                        if(event.hasConvocations == false) {
+                            _counterEventWithoutConvocation.value += 1
+                            Log.i("MAIN VM NOTIFS", "EVENT WITHOUT CONVOC : ${_counterEventWithoutConvocation.value}")
+                        }
+                    }
                 } else {
                     Log.e("VM MAIN", "Else de isSuccesful : ${response.errorBody()?.string()}")
                 }
@@ -79,19 +83,8 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             _mainSharedFlow.emit(Screen.Details.route + "/$eventId")
         }
-
     }
 
-//    fun getEventTypes() {
-//        viewModelScope.launch {
-//            _isLoading.value = true
-//            val categories = withContext(Dispatchers.IO) {
-//                api.getApi().getEventTypes()
-//            }
-//            _categories.value = categories
-//            _isLoading.value = false
-//        }
-//    }
 }
 sealed class SessionState {
     data object Idle : SessionState()

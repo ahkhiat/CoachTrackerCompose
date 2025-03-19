@@ -30,6 +30,12 @@ class AuthInterceptor @Inject constructor(
         } else {
             originalRequest
         }
-        return chain.proceed(newRequest)
+        val response = chain.proceed(newRequest)
+
+//        if (response.code == 401) {
+//            authManager.onTokenExpired?.invoke()
+//        }
+
+        return response
     }
 }
