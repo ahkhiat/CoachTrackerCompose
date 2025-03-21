@@ -1,7 +1,10 @@
 package com.devid_academy.coachtrackercompose.ui.screen.details
 
 import DatePattern
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,9 +12,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Details
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.WarningAmber
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -42,6 +53,7 @@ import com.devid_academy.coachtrackercompose.data.dto.ConvocationDTO
 import com.devid_academy.coachtrackercompose.data.dto.EventDTO
 import com.devid_academy.coachtrackercompose.data.dto.EventTypeDTO
 import com.devid_academy.coachtrackercompose.data.dto.PlayerDTO
+import com.devid_academy.coachtrackercompose.data.dto.PresenceDTO
 import com.devid_academy.coachtrackercompose.data.dto.SeasonDTO
 import com.devid_academy.coachtrackercompose.data.dto.StadiumDTO
 import com.devid_academy.coachtrackercompose.data.dto.TeamDTO
@@ -49,6 +61,8 @@ import com.devid_academy.coachtrackercompose.data.dto.UserDTO
 import com.devid_academy.coachtrackercompose.data.dto.VisitorTeamDTO
 import com.devid_academy.coachtrackercompose.ui.navigation.Screen
 import com.devid_academy.coachtrackercompose.ui.screen.components.BlueButton
+import com.devid_academy.coachtrackercompose.ui.theme.DarkRed
+import com.devid_academy.coachtrackercompose.ui.theme.LightRed
 import com.devid_academy.coachtrackercompose.util.getStatus
 import getPartialDate
 
@@ -61,8 +75,11 @@ fun DetailsScreen(
     eventId: Int
 )  {
     val eventStateFlow by detailsViewModel.eventStateFlow.collectAsState()
-    val showButtonCreate by detailsViewModel.showButtonCreateConvocationsStateFlow.collectAsState()
+    val showButtonCreateConvocations by detailsViewModel.showButtonCreateConvocationsStateFlow.collectAsState()
     val convocationsList by detailsViewModel.convocationsListStateFlow.collectAsState()
+    val showButtonCreatePresences by detailsViewModel
+        .showButtonCreatePresencesStateFlow.collectAsState()
+    val presencesList by detailsViewModel.presencesListStateFlow.collectAsState()
 
     LaunchedEffect(eventId) {
         detailsViewModel.getEvent(eventId)
@@ -72,16 +89,25 @@ fun DetailsScreen(
         DetailsContent(
             event = it,
             convocationsList = convocationsList,
+            presencesList = presencesList,
             onNavigate = {
                 navController.popBackStack()
             },
-            showButtonCreate = showButtonCreate,
+            showButtonCreateConvocations = showButtonCreateConvocations,
+            showButtonCreatePresences = showButtonCreatePresences,
             onNavigateToCreateConvocations = {
                 navController.navigate(Screen.CreateConvocation.route + "/$eventId")
             },
-            onNavigateToEditConvocation = {
+            onNavigateToEditConvocations = {
                 navController.navigate(Screen.EditConvocation.route + "/$eventId")
+            },
+            onNavigateToCreatePresences = {
+
+            },
+            onNavigateToEditPresences = {
+
             }
+
         )
     }
 }
@@ -91,10 +117,14 @@ fun DetailsScreen(
 fun DetailsContent(
     event: EventDTO,
     convocationsList: List<ConvocationDTO?>,
+    presencesList: List<PresenceDTO?>,
     onNavigate: () -> Unit,
-    showButtonCreate: Boolean,
+    showButtonCreateConvocations: Boolean,
+    showButtonCreatePresences: Boolean,
     onNavigateToCreateConvocations: () -> Unit,
-    onNavigateToEditConvocation: () -> Unit
+    onNavigateToEditConvocations: () -> Unit,
+    onNavigateToCreatePresences: () -> Unit,
+    onNavigateToEditPresences: () -> Unit
 ) {
     val context = LocalContext.current
 
@@ -131,9 +161,54 @@ fun DetailsContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(16.dp),
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState())
+
 //            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
+            if(showButtonCreateConvocations) {
+                Card(
+                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = LightRed)
+                    ,
+                    border = BorderStroke(1.dp, DarkRed),
+
+                    modifier = Modifier.fillMaxWidth()
+
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.WarningAmber,
+                                contentDescription = "Notification icon",
+                                tint = DarkRed
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Text(
+                                text = "L'événement n'a pas de convocations",
+                                fontSize = 14.sp,
+                                color = DarkRed
+                            )
+                        }
+
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                            contentDescription = "Notification icon",
+                            tint = DarkRed
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(20.dp))
+            }
 
             Card(
                 shape = RoundedCornerShape(12.dp),
@@ -239,7 +314,7 @@ fun DetailsContent(
             )
             Spacer(modifier = Modifier.height(20.dp))
 
-            if (showButtonCreate) {
+            if (showButtonCreateConvocations) {
                 BlueButton(
                     buttonText = "Convoquer mes joueurs",
                     width = 250,
@@ -267,7 +342,7 @@ fun DetailsContent(
                         ),
                         shape = RoundedCornerShape(5.dp),
                         onClick = {
-                            onNavigateToEditConvocation()
+                            onNavigateToEditConvocations()
                         }
                     ) {
                         Text(
@@ -294,6 +369,70 @@ fun DetailsContent(
                             convocation?.let {
                                 Text(
                                     text = "${it.player.user.firstname} (${context.getStatus(it.status)})",
+                                    fontSize = 18.sp
+                                )
+                            }
+                        }
+
+                    }
+                }
+            }
+
+            if (showButtonCreatePresences) {
+                BlueButton(
+                    buttonText = "Présences",
+                    width = 250,
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    onClick = {
+                        onNavigateToCreatePresences()
+                    }
+                )
+            } else {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 20.dp)
+                    ,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = "Joueurs présents : " + presencesList.size,
+                        fontSize = 18.sp
+                    )
+                    Button(
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.LightGray
+                        ),
+                        shape = RoundedCornerShape(5.dp),
+                        onClick = {
+                            onNavigateToEditPresences()
+                        }
+                    ) {
+                        Text(
+                            text = "Modifier",
+                            color = Color.Black
+                        )
+                    }
+
+                }
+                Card(
+                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant),
+                    modifier = Modifier
+                        .fillMaxWidth()
+
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .padding(16.dp),
+
+                        ) {
+                        presencesList.forEach {presence ->
+                            presence?.let {
+                                Text(
+                                    text = "${it.player.user.firstname} (${it.onTime})",
                                     fontSize = 18.sp
                                 )
                             }
@@ -364,9 +503,26 @@ fun PreviewDetailsContent() {
                 )
             )
         ),
+        presencesList = listOf(
+            PresenceDTO(
+                onTime = true,
+                player = PlayerDTO(
+                    id = 24,
+                    UserDTO(
+                        id = 52,
+                        firstname = "Marie",
+                        lastname = "Dubois"
+                    ),
+                    playsInTeam = null
+                )
+            )
+        ),
         onNavigate = {},
-        showButtonCreate = false,
+        showButtonCreateConvocations = true,
+        showButtonCreatePresences = true,
         onNavigateToCreateConvocations = {},
-        onNavigateToEditConvocation = {}
+        onNavigateToEditConvocations = {},
+        onNavigateToCreatePresences = {},
+        onNavigateToEditPresences = {}
     )
 }

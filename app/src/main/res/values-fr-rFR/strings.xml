@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CoachTrackerCompose</string>
+
+    <string name="fill_all_inputs">Veuillez remplir tous les champs</string>
+    <string name="not_provided">Information non fournie</string>
+    <string name="invalid_credentials">Nom d\'utilisateur ou mot de passe incorrect</string>
+    <string name="login_et_name">Email</string>
+    <string name="login_et_password">Mot de passe</string>
+    <string name="login_tv_title">Connectez-vous</string>
+    <string name="login_btn_login">Se connecter</string>
+    <string name="login_tv_not_registered">Vous n\'avez pas de compte ? Inscrivez-vous !</string>
+
+    <string name="error_param">Erreur paramètre</string>
+    <string name="server_error">Erreur serveur</string>
+    <string name="create_success">Evenement créée</string>
+    <string name="convocations_sended">Convocations envoyées</string>
+
+    <string name="player_already_called_up">Un des joueurs est déjà convoqué</string>
+    <string name="invalid_request">Requete invalide</string>
+
+    <string name="pending">en attente</string>
+    <string name="accepted">acceptée</string>
+    <string name="rejected">rejetée</string>
+
+    <string name="status_undefined">undefined status</string>
+    <string name="convocation_updated">Convocation is updated</string>
+
+
+</resources>

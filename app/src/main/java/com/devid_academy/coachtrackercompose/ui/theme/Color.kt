@@ -11,6 +11,7 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 val CoachTrackerColor = Color(0xFF8FB860)
-val EventWithoutConvocationsColor = Color(0xFFFFB3AD)
+val LightRed = Color(0xFFFFB3AD)
+val DarkRed = Color(0xFF910000)
 
 val essai = Color(0xFF0019BD)

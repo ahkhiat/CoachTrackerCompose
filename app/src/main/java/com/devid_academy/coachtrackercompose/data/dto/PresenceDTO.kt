@@ -7,12 +7,12 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class PresenceDTO (
 
-    val id: Int?,
+//    val id: Int?,
 
     @Json(name = "on_time")
     val onTime : Boolean,
 
     val player : PlayerDTO,
-    val event: EventDTO?
+//    val event: EventDTO?
 
 ) : Parcelable
