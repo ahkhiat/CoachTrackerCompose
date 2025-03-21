@@ -170,12 +170,10 @@ fun DetailsContent(
                 Card(
                     shape = RoundedCornerShape(12.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = LightRed)
-                    ,
+                        containerColor = LightRed),
                     border = BorderStroke(1.dp, DarkRed),
-
-                    modifier = Modifier.fillMaxWidth()
-
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = onNavigateToCreateConvocations
                 ) {
                     Row(
                         modifier = Modifier
