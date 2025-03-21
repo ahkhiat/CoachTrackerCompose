@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,6 +22,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Details
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.WarningAmber
 import androidx.compose.material3.Button
@@ -62,7 +64,10 @@ import com.devid_academy.coachtrackercompose.data.dto.VisitorTeamDTO
 import com.devid_academy.coachtrackercompose.ui.navigation.Screen
 import com.devid_academy.coachtrackercompose.ui.screen.components.BlueButton
 import com.devid_academy.coachtrackercompose.ui.theme.DarkRed
+import com.devid_academy.coachtrackercompose.ui.theme.DarkYellow
 import com.devid_academy.coachtrackercompose.ui.theme.LightRed
+import com.devid_academy.coachtrackercompose.ui.theme.LightYellow
+import com.devid_academy.coachtrackercompose.util.getOnTime
 import com.devid_academy.coachtrackercompose.util.getStatus
 import getPartialDate
 
@@ -102,7 +107,7 @@ fun DetailsScreen(
                 navController.navigate(Screen.EditConvocation.route + "/$eventId")
             },
             onNavigateToCreatePresences = {
-
+                navController.navigate(Screen.CreatePresence.route + "/$eventId")
             },
             onNavigateToEditPresences = {
 
@@ -168,7 +173,7 @@ fun DetailsContent(
         ) {
             if(showButtonCreateConvocations) {
                 Card(
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(3.dp),
                     colors = CardDefaults.cardColors(
                         containerColor = LightRed),
                     border = BorderStroke(1.dp, DarkRed),
@@ -205,16 +210,53 @@ fun DetailsContent(
                         )
                     }
                 }
-                Spacer(modifier = Modifier.height(20.dp))
             }
-
+            if(showButtonCreatePresences) {
+                Card(
+                    shape = RoundedCornerShape(3.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = LightYellow
+                    ),
+                    border = BorderStroke(1.dp, DarkYellow),
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = onNavigateToCreatePresences
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.WarningAmber,
+                                contentDescription = "Notification icon",
+                                tint = DarkYellow
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Text(
+                                text = "L'événement n'a pas de présences",
+                                fontSize = 14.sp,
+                                color = DarkYellow
+                            )
+                        }
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                            contentDescription = "Notification icon",
+                            tint = DarkYellow
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+            }
             Card(
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.surfaceVariant),
-                modifier = Modifier
-                    .fillMaxWidth()
-
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Column(
                     modifier = Modifier
@@ -295,7 +337,6 @@ fun DetailsContent(
                     )
                 }
             }
-
             Spacer(modifier = Modifier.height(20.dp))
             Text(
                 text = "Lieu :",
@@ -312,28 +353,19 @@ fun DetailsContent(
             )
             Spacer(modifier = Modifier.height(20.dp))
 
-            if (showButtonCreateConvocations) {
-                BlueButton(
-                    buttonText = "Convoquer mes joueurs",
-                    width = 250,
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    onClick = {
-                        onNavigateToCreateConvocations()
-                    }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 20.dp)
+                ,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = "Joueurs convoqués : " + convocationsList.size,
+                    fontSize = 18.sp
                 )
-            } else {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 20.dp)
-                    ,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(
-                        text = "Joueurs convoqués : " + convocationsList.size,
-                        fontSize = 18.sp
-                    )
+                if(!showButtonCreateConvocations) {
                     Button(
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color.LightGray
@@ -343,13 +375,25 @@ fun DetailsContent(
                             onNavigateToEditConvocations()
                         }
                     ) {
-                        Text(
-                            text = "Modifier",
-                            color = Color.Black
+                        Icon(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = "Modifier",
+                            tint = Color.Black,
                         )
                     }
-
                 }
+            }
+            if (showButtonCreateConvocations) {
+                BlueButton(
+                    buttonText = "Convoquer mes joueurs",
+                    width = 250,
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    onClick = {
+                        onNavigateToCreateConvocations()
+                    }
+
+                )
+            } else {
                 Card(
                     shape = RoundedCornerShape(12.dp),
                     colors = CardDefaults.cardColors(
@@ -375,7 +419,38 @@ fun DetailsContent(
                     }
                 }
             }
+            Spacer(modifier = Modifier.height(20.dp))
 
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 20.dp)
+                ,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = "Joueurs présents : " + presencesList.size,
+                    fontSize = 18.sp
+                )
+                if(!showButtonCreatePresences) {
+                    Button(
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.LightGray
+                        ),
+                        shape = RoundedCornerShape(5.dp),
+                        onClick = {
+                            onNavigateToEditPresences()
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = "Modifier",
+                            tint = Color.Black
+                        )
+                    }
+                }
+            }
             if (showButtonCreatePresences) {
                 BlueButton(
                     buttonText = "Présences",
@@ -386,34 +461,6 @@ fun DetailsContent(
                     }
                 )
             } else {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 20.dp)
-                    ,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(
-                        text = "Joueurs présents : " + presencesList.size,
-                        fontSize = 18.sp
-                    )
-                    Button(
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.LightGray
-                        ),
-                        shape = RoundedCornerShape(5.dp),
-                        onClick = {
-                            onNavigateToEditPresences()
-                        }
-                    ) {
-                        Text(
-                            text = "Modifier",
-                            color = Color.Black
-                        )
-                    }
-
-                }
                 Card(
                     shape = RoundedCornerShape(12.dp),
                     colors = CardDefaults.cardColors(
@@ -430,18 +477,14 @@ fun DetailsContent(
                         presencesList.forEach {presence ->
                             presence?.let {
                                 Text(
-                                    text = "${it.player.user.firstname} (${it.onTime})",
+                                    text = "${it.player.user.firstname} (${context.getOnTime(it.onTime)})",
                                     fontSize = 18.sp
                                 )
                             }
                         }
-
                     }
                 }
             }
-
-
-
         }
     }
 }
@@ -516,8 +559,8 @@ fun PreviewDetailsContent() {
             )
         ),
         onNavigate = {},
-        showButtonCreateConvocations = true,
-        showButtonCreatePresences = true,
+        showButtonCreateConvocations = false,
+        showButtonCreatePresences = false,
         onNavigateToCreateConvocations = {},
         onNavigateToEditConvocations = {},
         onNavigateToCreatePresences = {},

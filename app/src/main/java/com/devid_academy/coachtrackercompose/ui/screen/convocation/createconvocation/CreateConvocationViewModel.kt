@@ -1,4 +1,4 @@
-package com.devid_academy.coachtrackercompose.ui.screen.createconvocation
+package com.devid_academy.coachtrackercompose.ui.screen.convocation.createconvocation
 
 import android.util.Log
 import androidx.lifecycle.LiveData

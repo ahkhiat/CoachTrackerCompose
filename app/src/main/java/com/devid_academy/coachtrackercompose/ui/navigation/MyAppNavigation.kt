@@ -11,19 +11,21 @@ import com.devid_academy.coachtrackercompose.ui.screen.auth.AuthViewModel
 import com.devid_academy.coachtrackercompose.ui.screen.auth.LoginScreen
 import com.devid_academy.coachtrackercompose.ui.screen.auth.LoginViewModel
 import com.devid_academy.coachtrackercompose.ui.screen.auth.RegisterScreen
-import com.devid_academy.coachtrackercompose.ui.screen.createconvocation.CreateConvocationScreen
-import com.devid_academy.coachtrackercompose.ui.screen.createconvocation.CreateConvocationViewModel
-import com.devid_academy.coachtrackercompose.ui.screen.createevent.CreateEventScreen
-import com.devid_academy.coachtrackercompose.ui.screen.createevent.CreateEventViewModel
+import com.devid_academy.coachtrackercompose.ui.screen.convocation.createconvocation.CreateConvocationScreen
+import com.devid_academy.coachtrackercompose.ui.screen.convocation.createconvocation.CreateConvocationViewModel
+import com.devid_academy.coachtrackercompose.ui.screen.event.createevent.CreateEventScreen
+import com.devid_academy.coachtrackercompose.ui.screen.event.createevent.CreateEventViewModel
 import com.devid_academy.coachtrackercompose.ui.screen.details.DetailsScreen
 import com.devid_academy.coachtrackercompose.ui.screen.details.DetailsViewModel
-import com.devid_academy.coachtrackercompose.ui.screen.editconvocation.EditConvocationScreen
-import com.devid_academy.coachtrackercompose.ui.screen.editconvocation.EditConvocationViewModel
+import com.devid_academy.coachtrackercompose.ui.screen.convocation.editconvocation.EditConvocationScreen
+import com.devid_academy.coachtrackercompose.ui.screen.convocation.editconvocation.EditConvocationViewModel
 import com.devid_academy.coachtrackercompose.ui.screen.splash.SplashScreen
 import com.devid_academy.coachtrackercompose.ui.screen.main.MainScreen
 import com.devid_academy.coachtrackercompose.ui.screen.main.MainViewModel
 import com.devid_academy.coachtrackercompose.ui.screen.notification.NotificationScreen
 import com.devid_academy.coachtrackercompose.ui.screen.notification.NotificationViewModel
+import com.devid_academy.coachtrackercompose.ui.screen.presence.createpresence.CreatePresenceScreen
+import com.devid_academy.coachtrackercompose.ui.screen.presence.createpresence.CreatePresenceViewModel
 import com.devid_academy.coachtrackercompose.ui.screen.profile.ProfileScreen
 import com.devid_academy.coachtrackercompose.ui.screen.profile.ProfileViewModel
 import com.devid_academy.coachtrackercompose.ui.screen.splash.SplashViewModel
@@ -100,6 +102,14 @@ fun MyAppNavigation() {
             val editConvocationViewModel: EditConvocationViewModel = hiltViewModel()
             EditConvocationScreen(navController, editConvocationViewModel, eventId)
         }
+        composable(
+            route = Screen.CreatePresence.route + "/{eventId}",
+            arguments = listOf(navArgument("eventId") { type = NavType.IntType })
+        ) {
+            val eventId = it.arguments?.getInt("eventId") ?: 0
+            val createPresenceViewModel: CreatePresenceViewModel = hiltViewModel()
+            CreatePresenceScreen(navController, createPresenceViewModel, eventId)
+        }
     }
 }
 
@@ -117,6 +127,7 @@ sealed class Screen(val route: String) {
     object CreateConvocation: Screen("create_convocation")
     object EditConvocation: Screen("edit_convocation")
     object Notification: Screen("notification")
+    object CreatePresence: Screen("create_presence")
 }
 
 

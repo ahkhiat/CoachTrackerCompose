@@ -24,4 +24,8 @@
 
     <string name="status_undefined">undefined status</string>
     <string name="convocation_updated">Convocation is updated</string>
+
+    <string name="presences_saved">Presences are saved</string>
+    <string name="late">late</string>
+    <string name="on_time">on time</string>
 </resources>

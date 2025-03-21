@@ -1,4 +1,4 @@
-package com.devid_academy.coachtrackercompose.ui.screen.createevent
+package com.devid_academy.coachtrackercompose.ui.screen.event.createevent
 
 import android.util.Log
 import androidx.lifecycle.LiveData

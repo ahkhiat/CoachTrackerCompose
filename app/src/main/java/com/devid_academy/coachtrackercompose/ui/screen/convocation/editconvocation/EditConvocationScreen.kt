@@ -1,4 +1,4 @@
-package com.devid_academy.coachtrackercompose.ui.screen.editconvocation
+package com.devid_academy.coachtrackercompose.ui.screen.convocation.editconvocation
 
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
@@ -13,12 +13,10 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -44,14 +42,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.devid_academy.coachtrackercompose.data.dto.ConvocationDTO
 import com.devid_academy.coachtrackercompose.data.dto.PlayerDTO
 import com.devid_academy.coachtrackercompose.ui.navigation.BottomBar
-import com.devid_academy.coachtrackercompose.ui.navigation.Screen
 import com.devid_academy.coachtrackercompose.ui.screen.components.BlueButton
-import com.devid_academy.coachtrackercompose.ui.screen.createconvocation.CreateConvocationContent
-import com.devid_academy.coachtrackercompose.ui.screen.createconvocation.CreateConvocationViewModel
-import com.devid_academy.coachtrackercompose.ui.screen.createconvocation.PlayerItem
+import com.devid_academy.coachtrackercompose.ui.screen.convocation.createconvocation.PlayerItem
 import com.devid_academy.coachtrackercompose.util.ViewModelEvent
 
 @OptIn(ExperimentalMaterial3Api::class)

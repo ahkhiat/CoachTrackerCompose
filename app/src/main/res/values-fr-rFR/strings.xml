@@ -24,7 +24,11 @@
     <string name="rejected">rejetée</string>
 
     <string name="status_undefined">undefined status</string>
-    <string name="convocation_updated">Convocation is updated</string>
+    <string name="convocation_updated">Convocation mise à jour</string>
+
+    <string name="presences_saved">Les présences sont enregistrées</string>
+    <string name="late">en retard</string>
+    <string name="on_time">à l\'heure</string>
 
 
 </resources>

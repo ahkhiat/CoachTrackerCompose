@@ -18,10 +18,13 @@ object ApiRoutes {
     const val ADD_CONVOCATION = "convocations/new"
     const val UPDATE_CONVOCATION = "convocations/update"
 
+    const val ADD_PRESENCE = "presences/new"
+    const val UPDATE_PRESENCE = "presences/update"
+
     const val GET_TEAM = "teams/{id}"
 
     const val GET_VISITOR_TEAM_LIST = "visitor_teams"
-    const val GET_STATIUM_LIST = "stadia"
+    const val GET_STADIUM_LIST = "stadia"
     const val GET_SEASON_LIST = "seasons"
 
     const val GET_USER_PROFILE = "user/profile"

@@ -18,6 +18,12 @@ fun Context.getStatus(status: Int): String {
         else -> getString(R.string.status_undefined)
     }
 }
+fun Context.getOnTime(onTime: Boolean): String {
+    return when (onTime) {
+        false -> getString(R.string.late)
+        true -> getString(R.string.on_time)
+    }
+}
 
 fun <T> Fragment.fillSpinner(liveData: LiveData<List<T>>, spinner: Spinner, getDisplayText: (T) -> String){
     liveData.observe(viewLifecycleOwner) {

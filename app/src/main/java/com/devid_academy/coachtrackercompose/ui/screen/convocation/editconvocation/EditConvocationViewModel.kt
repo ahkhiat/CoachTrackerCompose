@@ -1,13 +1,10 @@
-package com.devid_academy.coachtrackercompose.ui.screen.editconvocation
+package com.devid_academy.coachtrackercompose.ui.screen.convocation.editconvocation
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.devid_academy.coachtrackercompose.R
 import com.devid_academy.coachtrackercompose.data.dto.ConvocationDTO
-import com.devid_academy.coachtrackercompose.data.dto.CreateConvocationDTO
 import com.devid_academy.coachtrackercompose.data.dto.EventDTO
 import com.devid_academy.coachtrackercompose.data.dto.TeamDTO
 import com.devid_academy.coachtrackercompose.data.dto.UpdateConvocationDTO

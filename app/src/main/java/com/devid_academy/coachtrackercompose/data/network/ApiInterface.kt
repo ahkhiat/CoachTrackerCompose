@@ -3,6 +3,7 @@ package com.devid_academy.coachtrackercompose.data.network
 
 import com.devid_academy.coachtrackercompose.data.dto.CreateConvocationDTO
 import com.devid_academy.coachtrackercompose.data.dto.CreateEventDTO
+import com.devid_academy.coachtrackercompose.data.dto.CreatePresenceDTO
 import com.devid_academy.coachtrackercompose.data.dto.EventDTO
 import com.devid_academy.coachtrackercompose.data.dto.EventTypeDTO
 import com.devid_academy.coachtrackercompose.data.dto.SeasonDTO
@@ -16,6 +17,7 @@ import com.devid_academy.coachtrackercompose.data.dto.auth.StatusAuthDTO
 import com.devid_academy.coachtrackercompose.data.dto.response.ResponseCreateDTO
 import com.devid_academy.coachtrackercompose.data.dto.UserProfileDTO
 import com.devid_academy.coachtrackercompose.data.dto.response.ResponseConvocationDTO
+import com.devid_academy.coachtrackercompose.data.dto.response.ResponsePresenceDTO
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -59,6 +61,9 @@ interface ApiInterface {
     @PUT(ApiRoutes.UPDATE_CONVOCATION)
     suspend fun updateConvocation(@Body convocations: UpdateConvocationDTO): Response<ResponseConvocationDTO>
 
+    @POST(ApiRoutes.ADD_PRESENCE)
+    suspend fun insertPresence(@Body convocations: CreatePresenceDTO): Response<ResponsePresenceDTO>
+
 //    Teams
     @GET(ApiRoutes.GET_TEAM)
     suspend fun getTeam(@Path("id") teamId: Int): TeamDTO
@@ -68,7 +73,7 @@ interface ApiInterface {
     @GET(ApiRoutes.GET_VISITOR_TEAM_LIST)
     suspend fun getVisitorTeamList(): List<VisitorTeamDTO>
 
-    @GET(ApiRoutes.GET_STATIUM_LIST)
+    @GET(ApiRoutes.GET_STADIUM_LIST)
     suspend fun getStadiumList(): List<StadiumDTO>
 
     @GET(ApiRoutes.GET_SEASON_LIST)

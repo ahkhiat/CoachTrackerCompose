@@ -119,7 +119,7 @@ fun LoginContent(
             label = context.getString(R.string.login_et_password),
             visualTransformation = true
         )
-        Spacer(modifier = Modifier.height(200.dp))
+        Spacer(modifier = Modifier.height(100.dp))
         BlueButton(
             buttonText = "Sign in",
             onClick = {
@@ -144,7 +144,7 @@ fun LoginContent(
 }
 
 @Composable
-@Preview
+@Preview(showBackground = true)
 fun LoginPreview() {
     LoginContent(
         onLogin = {_, _ -> },
