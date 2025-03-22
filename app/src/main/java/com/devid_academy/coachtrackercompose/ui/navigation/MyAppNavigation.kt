@@ -11,6 +11,7 @@ import com.devid_academy.coachtrackercompose.ui.screen.auth.AuthViewModel
 import com.devid_academy.coachtrackercompose.ui.screen.auth.LoginScreen
 import com.devid_academy.coachtrackercompose.ui.screen.auth.LoginViewModel
 import com.devid_academy.coachtrackercompose.ui.screen.auth.RegisterScreen
+import com.devid_academy.coachtrackercompose.ui.screen.auth.RegisterViewModel
 import com.devid_academy.coachtrackercompose.ui.screen.convocation.createconvocation.CreateConvocationScreen
 import com.devid_academy.coachtrackercompose.ui.screen.convocation.createconvocation.CreateConvocationViewModel
 import com.devid_academy.coachtrackercompose.ui.screen.event.createevent.CreateEventScreen
@@ -26,8 +27,10 @@ import com.devid_academy.coachtrackercompose.ui.screen.notification.Notification
 import com.devid_academy.coachtrackercompose.ui.screen.notification.NotificationViewModel
 import com.devid_academy.coachtrackercompose.ui.screen.presence.createpresence.CreatePresenceScreen
 import com.devid_academy.coachtrackercompose.ui.screen.presence.createpresence.CreatePresenceViewModel
-import com.devid_academy.coachtrackercompose.ui.screen.profile.ProfileScreen
-import com.devid_academy.coachtrackercompose.ui.screen.profile.ProfileViewModel
+import com.devid_academy.coachtrackercompose.ui.screen.profile.playerprofile.PlayerProfileScreen
+import com.devid_academy.coachtrackercompose.ui.screen.profile.playerprofile.PlayerProfileViewModel
+import com.devid_academy.coachtrackercompose.ui.screen.profile.privateprofile.PrivateProfileScreen
+import com.devid_academy.coachtrackercompose.ui.screen.profile.privateprofile.PrivateProfileViewModel
 import com.devid_academy.coachtrackercompose.ui.screen.splash.SplashViewModel
 import com.devid_academy.coachtrackercompose.ui.screen.team.TeamScreen
 import com.devid_academy.coachtrackercompose.ui.screen.team.TeamViewModel
@@ -49,22 +52,22 @@ fun MyAppNavigation() {
             LoginScreen(navController, loginViewModel)
         }
         composable(Screen.Register.route) {
-            RegisterScreen(navController)
+            val registerViewModel: RegisterViewModel = hiltViewModel()
+            RegisterScreen(navController, registerViewModel)
         }
         composable(Screen.Main.route) {
             val mainViewModel: MainViewModel = hiltViewModel()
             val authViewModel: AuthViewModel = hiltViewModel()
             MainScreen(navController, authViewModel,mainViewModel)
         }
-        composable(
-            Screen.Profile.route,
-//            enterTransition = {
-//                slideInVertically { -it } },
-//            exitTransition = { slideOutVertically { -it } }
-            ) {
+        composable(Screen.PrivateProfile.route) {
                 val authViewModel: AuthViewModel = hiltViewModel()
-                val profileViewModel: ProfileViewModel = hiltViewModel()
-                ProfileScreen(navController, authViewModel, profileViewModel)
+                val privateProfileViewModel: PrivateProfileViewModel = hiltViewModel()
+                PrivateProfileScreen(navController, authViewModel, privateProfileViewModel)
+        }
+        composable(Screen.PlayerProfile.route) {
+            val playerProfileViewModel: PlayerProfileViewModel = hiltViewModel()
+            PlayerProfileScreen(navController, playerProfileViewModel)
         }
         composable(Screen.CreateEvent.route) {
             val createEventViewModel: CreateEventViewModel = hiltViewModel()
@@ -120,7 +123,7 @@ sealed class Screen(val route: String) {
     object Main : Screen("main")
     object Login : Screen("login")
     object Register : Screen("register")
-    object Profile: Screen("profile")
+    object PrivateProfile: Screen("private_profile")
     object CreateEvent: Screen("create_event")
     object Team: Screen("team")
     object Details: Screen("details")

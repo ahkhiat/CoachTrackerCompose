@@ -28,4 +28,11 @@
     <string name="presences_saved">Presences are saved</string>
     <string name="late">late</string>
     <string name="on_time">on time</string>
+    <string name="passwords_different">Passwords are different</string>
+    <string name="register_tv_already_registered">Already registered ? Sign in !</string>
+    <string name="register_tv_title">Sign up</string>
+    <string name="register_et_password_confirm">Confirm password</string>
+    <string name="register_et_firstname">Firstname</string>
+    <string name="register_et_lastname">Lastname</string>
+    <string name="register_birthdate">Birthdate</string>
 </resources>

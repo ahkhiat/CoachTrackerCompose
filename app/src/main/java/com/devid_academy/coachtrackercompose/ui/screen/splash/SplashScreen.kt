@@ -55,6 +55,7 @@ fun SplashScreen(navController: NavController, splashViewModel: SplashViewModel)
     SplashContent(isLoading = isLoadingFromVM)
 }
 
+@Composable
 fun SplashContent(isLoading: Boolean) {
     Column(
         modifier = Modifier
@@ -100,6 +101,14 @@ fun SplashContent(isLoading: Boolean) {
                 fontWeight = FontWeight.Bold
 
             )
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 10.dp),
+            contentAlignment = Alignment.BottomCenter
+        ) {
+            CircularProgressIndicator(color = Color.White)
         }
     }
 }

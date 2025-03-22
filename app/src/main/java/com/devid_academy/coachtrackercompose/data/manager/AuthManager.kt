@@ -18,7 +18,7 @@ class AuthManager @Inject constructor(
     fun logout() {
         with(preferencesManager){
             removeToken()
-            clearUser()
+            clearAll()
         }
     }
 

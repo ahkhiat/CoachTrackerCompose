@@ -1,20 +1,13 @@
-package com.devid_academy.coachtrackercompose.ui.screen.profile
+package com.devid_academy.coachtrackercompose.ui.screen.profile.privateprofile
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,13 +21,13 @@ import com.devid_academy.coachtrackercompose.ui.screen.auth.AuthViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen(
+fun PrivateProfileScreen(
     navController: NavController,
     authViewModel: AuthViewModel,
-    profileViewModel: ProfileViewModel
+    privateProfileViewModel: PrivateProfileViewModel
 ) {
-    val teamName by profileViewModel.teamNameStateFlow.collectAsState()
-    val userStateFlow by profileViewModel.userStateFlow.collectAsState()
+    val teamName by privateProfileViewModel.teamNameStateFlow.collectAsState()
+    val userStateFlow by privateProfileViewModel.userStateFlow.collectAsState()
 
     Scaffold(
         topBar = {
@@ -46,30 +39,7 @@ fun ProfileScreen(
                         fontWeight = FontWeight.Bold
                     )
                 },
-                actions = {
-//                    Box(
-//                        contentAlignment = Alignment.Center,
-//                        modifier = Modifier
-//                            .size(50.dp)
-//                            .clip(CircleShape)
-//                            .background(MaterialTheme.colorScheme.onPrimary)
-//                            .padding(8.dp)
-//                            .clickable {
-//                                navController.navigate(Screen.Profile.route)
-//                            }
-//
-//                    ) {
-//                        Text(
-//                            text = ""
-////                            profileViewModel.userStateFlow.value.firstname.first().toString()
-////                                    + profileViewModel.userStateFlow.value.lastname.first().toString()
-//                            ,
-//                            color = Color.Black,
-//                            fontWeight = FontWeight.Bold,
-//                            fontSize = 22.sp
-//                        )
-//                    }
-                },
+                actions = {},
                 colors = TopAppBarColors(
                     containerColor = Color.Blue,
                     titleContentColor = Color.White,
@@ -107,8 +77,6 @@ fun ProfileScreen(
             }
         }
     )
-
-
 }
 @Composable
 fun ProfileScreenContent(
@@ -128,19 +96,6 @@ fun ProfileScreenContent(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-//        Box(
-//            modifier = Modifier.fillMaxWidth()
-//        ) {
-//            Icon(
-//                imageVector = Icons.Default.Close,
-//                contentDescription = "Fermer",
-//                modifier = Modifier
-//                    .align(Alignment.CenterStart)
-//                    .size(42.dp)
-//                    .clickable { onExit() },
-//                tint = Color.Black
-//            )
-//        }
         Card(
             shape = RoundedCornerShape(12.dp),
             colors = CardDefaults.cardColors(
@@ -178,7 +133,6 @@ fun ProfileScreenContent(
                 ProfileLine(title = "Birthdate", content = birthdate)
                 Spacer(modifier = Modifier.height(8.dp))
                 ProfileLine(title = "Phone", content = phone)
-
             }
         }
         Card(
@@ -222,7 +176,8 @@ fun ProfileScreenContent(
                     )
                 }
             }
-        }    }
+        }
+    }
 }
 
 @Composable
