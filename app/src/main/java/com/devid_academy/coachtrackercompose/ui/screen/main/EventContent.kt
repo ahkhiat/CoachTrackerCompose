@@ -78,8 +78,15 @@ fun ItemView(
     onClick: (EventDTO) -> Unit
     ) {
     Card(
+//        colors = CardDefaults.cardColors(
+//            containerColor = if(event.hasConvocations == true)MaterialTheme.colorScheme.surface else LightRed,
+//        ),
         colors = CardDefaults.cardColors(
-            containerColor = if(event.hasConvocations == true)MaterialTheme.colorScheme.surface else LightRed,
+            containerColor = when {
+                event.isInProgress == true -> Color.Green
+                event.hasConvocations == true -> MaterialTheme.colorScheme.surface
+                else -> LightRed
+            }
         ),
         modifier = Modifier
             .width(380.dp)
@@ -199,6 +206,7 @@ fun PreviewItemView() {
         hasConvocations = false,
         convocations = emptyList(),
         presences = emptyList(),
+        isInProgress = true
 
     )
 

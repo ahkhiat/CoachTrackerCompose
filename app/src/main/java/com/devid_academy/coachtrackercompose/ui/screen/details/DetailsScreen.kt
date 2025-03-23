@@ -64,8 +64,10 @@ import com.devid_academy.coachtrackercompose.data.dto.UserDTO
 import com.devid_academy.coachtrackercompose.data.dto.VisitorTeamDTO
 import com.devid_academy.coachtrackercompose.ui.navigation.Screen
 import com.devid_academy.coachtrackercompose.ui.screen.components.BlueButton
+import com.devid_academy.coachtrackercompose.ui.theme.DarkGreen
 import com.devid_academy.coachtrackercompose.ui.theme.DarkRed
 import com.devid_academy.coachtrackercompose.ui.theme.DarkYellow
+import com.devid_academy.coachtrackercompose.ui.theme.LightGreen
 import com.devid_academy.coachtrackercompose.ui.theme.LightRed
 import com.devid_academy.coachtrackercompose.ui.theme.LightYellow
 import com.devid_academy.coachtrackercompose.util.getOnTime
@@ -172,6 +174,46 @@ fun DetailsContent(
 
 //            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
+            if(event.isInProgress == true) {
+                Card(
+                    shape = RoundedCornerShape(3.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = LightGreen),
+                    border = BorderStroke(1.dp, DarkGreen),
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = onNavigateToCreateConvocations
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.WarningAmber,
+                                contentDescription = "Notification icon",
+                                tint = DarkGreen
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Text(
+                                text = "L'événement est en cours",
+                                fontSize = 14.sp,
+                                color = DarkGreen
+                            )
+                        }
+
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                            contentDescription = "Notification icon",
+                            tint = DarkGreen
+                        )
+                    }
+                }
+            }
             if(showButtonCreateConvocations) {
                 Card(
                     shape = RoundedCornerShape(3.dp),
@@ -527,7 +569,8 @@ fun PreviewDetailsContent() {
         ),
         presences = emptyList(),
         convocations = emptyList(),
-        hasConvocations = true
+        hasConvocations = true,
+        isInProgress = true,
     )
     DetailsContent(
         event = sampleEvent,

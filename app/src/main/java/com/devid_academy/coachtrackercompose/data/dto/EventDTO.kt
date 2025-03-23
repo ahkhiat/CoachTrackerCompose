@@ -22,6 +22,7 @@ data class EventDTO(
     val season: SeasonDTO,
     val hasConvocations: Boolean?,
     val presences: List<PresenceDTO>?,
-    val convocations: List<ConvocationDTO>?
+    val convocations: List<ConvocationDTO>?,
+    val isInProgress: Boolean?
 
 ) : Parcelable
