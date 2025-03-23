@@ -15,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PrivateProfileViewModel @Inject constructor(
     private val api: ApiService,
-    private val preferencesManager: PreferencesManager
+    private val pm: PreferencesManager
 ): ViewModel() {
 
     private val _isLoading = MutableStateFlow(false)
@@ -33,7 +33,7 @@ class PrivateProfileViewModel @Inject constructor(
 
     fun getUserPofile() {
 
-        _userStateFlow.value = preferencesManager.getUser()!!
+        _userStateFlow.value = pm.getUser()!!
 
         viewModelScope.launch {
             _isLoading.value = true
@@ -41,7 +41,7 @@ class PrivateProfileViewModel @Inject constructor(
 //                val result = withContext(Dispatchers.IO) {
 //                    api.getApi().getUserProfile()
 //                }
-                val result = preferencesManager.getUser()
+                val result = pm.getUser()
                 _userStateFlow.value = result!!
                 _teamNameStateFlow.value = (result.isCoachOf?.name ?: result.playsIn?.name).toString()
                 Log.i("VM PROFILE", "VM COACH OU PLAYSIN : ${result.isCoachOf?.name}")

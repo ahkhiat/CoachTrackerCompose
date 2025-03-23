@@ -26,8 +26,12 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -50,6 +54,19 @@ fun TeamScreen(
     navController: NavController,
     teamViewModel: TeamViewModel
 ) {
+    var selectedPlayer by remember { mutableStateOf<PlayerDTO?>(null) }
+
+    LaunchedEffect(true) {
+        teamViewModel.teamSharedFlow.collect { direction ->
+            direction?.let {
+                when {
+                    it.startsWith("player_profile/") -> {
+                        navController.navigate(it)
+                    }
+                }
+            }
+        }
+    }
 
     val teamStateFlow by teamViewModel.teamStateFlow.collectAsState()
 
@@ -87,7 +104,12 @@ fun TeamScreen(
                     TeamContent(
                         teamName = it.name,
                         playersList = it.players,
-                        coachesList = it.coaches
+                        coachesList = it.coaches,
+                        onClick = {player ->
+                            player.user.id?.let { userId ->
+                                teamViewModel.navigateToPublicProfile(userId)
+                            }
+                        }
                     )
                 }
             }
@@ -103,7 +125,8 @@ fun TeamScreen(
 fun TeamContent(
     teamName: String,
     playersList: List<PlayerDTO>?,
-    coachesList: List<CoachDTO>?
+    coachesList: List<CoachDTO>?,
+    onClick: (PlayerDTO) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -146,7 +169,12 @@ fun TeamContent(
             }
             playersList?.let { players ->
                 items(players) { player ->
-                    PlayerItem(player)
+                    PlayerItem(
+                        player,
+                        onClick = {
+                            onClick(player)
+                        }
+                    )
                 }
             } ?: item {
                 Text(text = "Aucun joueur trouvé", style = MaterialTheme.typography.bodyMedium)
@@ -171,13 +199,17 @@ fun CoachItem(coach: CoachDTO) {
 }
 
 @Composable
-fun PlayerItem(player: PlayerDTO) {
+fun PlayerItem(
+    player: PlayerDTO,
+    onClick: (PlayerDTO) -> Unit
+    ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp),
+            .padding(vertical = 1.dp),
         shape = RoundedCornerShape(8.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        onClick = { onClick(player) }
     ) {
         Column(modifier = Modifier.padding(8.dp)) {
             Text(text = player.user!!.firstname, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold)
@@ -212,6 +244,7 @@ fun TeamPreview() {
     TeamContent(
         teamName = "U11F1",
         playersList = players,
-        coachesList = coaches
+        coachesList = coaches,
+        onClick = {}
     )
 }

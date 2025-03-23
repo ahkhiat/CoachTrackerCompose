@@ -28,4 +28,5 @@ object ApiRoutes {
     const val GET_SEASON_LIST = "seasons"
 
     const val GET_USER_PROFILE = "user/profile"
+    const val GET_PLAYER_PROFILE = "user/publicprofile"
 }

@@ -8,9 +8,13 @@ import androidx.lifecycle.viewModelScope
 import com.devid_academy.coachtrackercompose.data.manager.PreferencesManager
 import com.devid_academy.coachtrackercompose.data.network.ApiService
 import com.devid_academy.coachtrackercompose.data.dto.TeamDTO
+import com.devid_academy.coachtrackercompose.ui.navigation.Screen
+import com.devid_academy.coachtrackercompose.util.ViewModelEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -27,6 +31,9 @@ class TeamViewModel @Inject constructor(
 
     private val _teamStateFlow = MutableStateFlow<TeamDTO?>(null)
     val teamStateFlow : StateFlow<TeamDTO?> = _teamStateFlow
+
+    private val _teamSharedFlow = MutableSharedFlow<String?>()
+    val teamSharedFlow: SharedFlow<String?> = _teamSharedFlow
 
     init {
         getTeam()
@@ -49,8 +56,11 @@ class TeamViewModel @Inject constructor(
             _isLoading.value = false
         }
     }
-    fun onLogout() {
-        _teamStateFlow.value = null
+
+    fun navigateToPublicProfile(userId: Int) {
+        viewModelScope.launch {
+            _teamSharedFlow.emit(Screen.PlayerProfile.route + "/$userId")
+        }
     }
 
 

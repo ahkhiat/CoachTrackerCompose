@@ -35,4 +35,5 @@
     <string name="register_et_firstname">Firstname</string>
     <string name="register_et_lastname">Lastname</string>
     <string name="register_birthdate">Birthdate</string>
+    <string name="player_not_found">Player not found</string>
 </resources>

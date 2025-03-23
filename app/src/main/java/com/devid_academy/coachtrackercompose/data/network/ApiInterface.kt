@@ -6,6 +6,7 @@ import com.devid_academy.coachtrackercompose.data.dto.CreateEventDTO
 import com.devid_academy.coachtrackercompose.data.dto.CreatePresenceDTO
 import com.devid_academy.coachtrackercompose.data.dto.EventDTO
 import com.devid_academy.coachtrackercompose.data.dto.EventTypeDTO
+import com.devid_academy.coachtrackercompose.data.dto.PlayerProfileDTO
 import com.devid_academy.coachtrackercompose.data.dto.SeasonDTO
 import com.devid_academy.coachtrackercompose.data.dto.StadiumDTO
 import com.devid_academy.coachtrackercompose.data.dto.TeamDTO
@@ -38,6 +39,9 @@ interface ApiInterface {
 //    User
     @GET(ApiRoutes.GET_USER_PROFILE)
     suspend fun getUserProfile(): UserProfileDTO
+
+    @GET(ApiRoutes.GET_PLAYER_PROFILE)
+    suspend fun getPlayerProfile(@Query("user_id") userId: Int) : Response<PlayerProfileDTO>
 
 //    Events
     @GET(ApiRoutes.GET_ALL_EVENTS)

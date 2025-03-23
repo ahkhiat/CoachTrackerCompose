@@ -65,9 +65,12 @@ fun MyAppNavigation() {
                 val privateProfileViewModel: PrivateProfileViewModel = hiltViewModel()
                 PrivateProfileScreen(navController, authViewModel, privateProfileViewModel)
         }
-        composable(Screen.PlayerProfile.route) {
+        composable(Screen.PlayerProfile.route + "/{userId}",
+            arguments = listOf(navArgument("userId") { type = NavType.IntType })
+        ) {
+            val userId = it.arguments?.getInt("userId") ?: 0
             val playerProfileViewModel: PlayerProfileViewModel = hiltViewModel()
-            PlayerProfileScreen(navController, playerProfileViewModel)
+            PlayerProfileScreen(navController, playerProfileViewModel, userId)
         }
         composable(Screen.CreateEvent.route) {
             val createEventViewModel: CreateEventViewModel = hiltViewModel()
@@ -124,6 +127,7 @@ sealed class Screen(val route: String) {
     object Login : Screen("login")
     object Register : Screen("register")
     object PrivateProfile: Screen("private_profile")
+    object PlayerProfile: Screen("player_profile")
     object CreateEvent: Screen("create_event")
     object Team: Screen("team")
     object Details: Screen("details")
