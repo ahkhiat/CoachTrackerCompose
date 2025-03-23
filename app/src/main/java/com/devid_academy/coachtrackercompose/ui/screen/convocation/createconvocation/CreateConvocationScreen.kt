@@ -109,7 +109,10 @@ fun CreateConvocationScreen(
                             navController.popBackStack()
                         }
                     ) {
-                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Retour")
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Retour"
+                        )
                     }
                 },
                 actions = {},

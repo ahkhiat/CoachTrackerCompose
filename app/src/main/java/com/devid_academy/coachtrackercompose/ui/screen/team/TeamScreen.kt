@@ -156,7 +156,10 @@ fun TeamContent(
                     CoachItem(coach)
                 }
             } ?: item {
-                Text(text = "Aucun coach trouvé", style = MaterialTheme.typography.bodyMedium)
+                Text(
+                    text = "Aucun coach trouvé",
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
 
             item {
@@ -177,7 +180,10 @@ fun TeamContent(
                     )
                 }
             } ?: item {
-                Text(text = "Aucun joueur trouvé", style = MaterialTheme.typography.bodyMedium)
+                Text(
+                    text = "Aucun joueur trouvé",
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
         }
     }
@@ -193,7 +199,11 @@ fun CoachItem(coach: CoachDTO) {
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(modifier = Modifier.padding(8.dp)) {
-            Text(text = coach.user!!.firstname, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold)
+            Text(
+                text = coach.user!!.firstname,
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 }
@@ -206,13 +216,18 @@ fun PlayerItem(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 1.dp),
+//            .padding(vertical = 4.dp)
+            ,
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         onClick = { onClick(player) }
     ) {
         Column(modifier = Modifier.padding(8.dp)) {
-            Text(text = player.user!!.firstname, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold)
+            Text(
+                text = player.user.firstname,
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 }
