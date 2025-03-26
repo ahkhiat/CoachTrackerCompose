@@ -70,7 +70,6 @@ fun CreateConvocationScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
 
-
     LaunchedEffect(true) {
         createConvocationViewModel.createConvocationSharedFlow.collect { event ->
             when (event) {
