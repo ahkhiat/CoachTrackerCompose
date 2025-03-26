@@ -114,6 +114,9 @@ fun DetailsScreen(
             },
             onNavigateToEditPresences = {
 
+            },
+            onNavigateToCreateGoal = {
+                navController.navigate(Screen.CreateGoal.route + "/$eventId")
             }
 
         )
@@ -132,7 +135,8 @@ fun DetailsContent(
     onNavigateToCreateConvocations: () -> Unit,
     onNavigateToEditConvocations: () -> Unit,
     onNavigateToCreatePresences: () -> Unit,
-    onNavigateToEditPresences: () -> Unit
+    onNavigateToEditPresences: () -> Unit,
+    onNavigateToCreateGoal: () -> Unit
 ) {
     val context = LocalContext.current
 
@@ -295,6 +299,25 @@ fun DetailsContent(
                 }
                 Spacer(modifier = Modifier.height(10.dp))
             }
+
+            if(event.eventType.name == "Match" && event.isInProgress == true) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    BlueButton(
+                        buttonText = "⚽ Enregistrer un but ⚽",
+                        width = 250,
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        onClick = {
+                            onNavigateToCreateGoal()
+                        }
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                }
+            }
+
+
             Card(
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(
@@ -608,6 +631,7 @@ fun PreviewDetailsContent() {
         onNavigateToCreateConvocations = {},
         onNavigateToEditConvocations = {},
         onNavigateToCreatePresences = {},
-        onNavigateToEditPresences = {}
+        onNavigateToEditPresences = {},
+        onNavigateToCreateGoal = {}
     )
 }

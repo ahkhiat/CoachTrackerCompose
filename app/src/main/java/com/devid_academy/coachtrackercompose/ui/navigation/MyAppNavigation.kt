@@ -20,6 +20,8 @@ import com.devid_academy.coachtrackercompose.ui.screen.details.DetailsScreen
 import com.devid_academy.coachtrackercompose.ui.screen.details.DetailsViewModel
 import com.devid_academy.coachtrackercompose.ui.screen.convocation.editconvocation.EditConvocationScreen
 import com.devid_academy.coachtrackercompose.ui.screen.convocation.editconvocation.EditConvocationViewModel
+import com.devid_academy.coachtrackercompose.ui.screen.goal.CreateGoalScreen
+import com.devid_academy.coachtrackercompose.ui.screen.goal.CreateGoalViewModel
 import com.devid_academy.coachtrackercompose.ui.screen.splash.SplashScreen
 import com.devid_academy.coachtrackercompose.ui.screen.main.MainScreen
 import com.devid_academy.coachtrackercompose.ui.screen.main.MainViewModel
@@ -116,6 +118,14 @@ fun MyAppNavigation() {
             val createPresenceViewModel: CreatePresenceViewModel = hiltViewModel()
             CreatePresenceScreen(navController, createPresenceViewModel, eventId)
         }
+        composable(
+            route = Screen.CreateGoal.route + "/{eventId}",
+            arguments = listOf(navArgument("eventId") { type = NavType.IntType })
+        ) {
+            val eventId = it.arguments?.getInt("eventId") ?: 0
+            val createGoalViewModel: CreateGoalViewModel = hiltViewModel()
+            CreateGoalScreen(navController, createGoalViewModel, eventId)
+        }
     }
 }
 
@@ -135,6 +145,7 @@ sealed class Screen(val route: String) {
     object EditConvocation: Screen("edit_convocation")
     object Notification: Screen("notification")
     object CreatePresence: Screen("create_presence")
+    object CreateGoal: Screen("create_goal")
 }
 
 

@@ -21,6 +21,10 @@ object ApiRoutes {
     const val ADD_PRESENCE = "presences/new"
     const val UPDATE_PRESENCE = "presences/update"
 
+    const val GET_GOALS = "goals"
+    const val ADD_GOAL = "goals/new"
+    const val DELETE_GOAL = "goals/{id}"
+
     const val GET_TEAM = "teams/{id}"
 
     const val GET_VISITOR_TEAM_LIST = "visitor_teams"

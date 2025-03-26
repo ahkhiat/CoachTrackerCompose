@@ -3,9 +3,11 @@ package com.devid_academy.coachtrackercompose.data.network
 
 import com.devid_academy.coachtrackercompose.data.dto.CreateConvocationDTO
 import com.devid_academy.coachtrackercompose.data.dto.CreateEventDTO
+import com.devid_academy.coachtrackercompose.data.dto.CreateGoalDTO
 import com.devid_academy.coachtrackercompose.data.dto.CreatePresenceDTO
 import com.devid_academy.coachtrackercompose.data.dto.EventDTO
 import com.devid_academy.coachtrackercompose.data.dto.EventTypeDTO
+import com.devid_academy.coachtrackercompose.data.dto.GoalDTO
 import com.devid_academy.coachtrackercompose.data.dto.PlayerProfileDTO
 import com.devid_academy.coachtrackercompose.data.dto.SeasonDTO
 import com.devid_academy.coachtrackercompose.data.dto.StadiumDTO
@@ -18,9 +20,11 @@ import com.devid_academy.coachtrackercompose.data.dto.auth.StatusAuthDTO
 import com.devid_academy.coachtrackercompose.data.dto.response.ResponseCreateDTO
 import com.devid_academy.coachtrackercompose.data.dto.UserProfileDTO
 import com.devid_academy.coachtrackercompose.data.dto.response.ResponseConvocationDTO
+import com.devid_academy.coachtrackercompose.data.dto.response.ResponseCreateGoalDTO
 import com.devid_academy.coachtrackercompose.data.dto.response.ResponsePresenceDTO
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -67,6 +71,15 @@ interface ApiInterface {
 
     @POST(ApiRoutes.ADD_PRESENCE)
     suspend fun insertPresence(@Body convocations: CreatePresenceDTO): Response<ResponsePresenceDTO>
+
+    @GET(ApiRoutes.GET_GOALS)
+    suspend fun getGoals(@Query("event") eventId: Int): Response<List<GoalDTO>>
+
+    @POST(ApiRoutes.ADD_GOAL)
+    suspend fun insertGoal(@Body goal: CreateGoalDTO): Response<ResponseCreateGoalDTO>
+
+    @DELETE(ApiRoutes.DELETE_GOAL)
+    suspend fun deleteGoal(@Path("id") goalId: Int): Response<Unit>
 
 //    Teams
     @GET(ApiRoutes.GET_TEAM)

@@ -42,11 +42,13 @@ fun BlueButton(
     modifier: Modifier = Modifier,
     buttonText: String,
     width: Int = 200,
+    enabled: Boolean = true,
     onClick: () -> Unit
 ) {
     Button(
         onClick = onClick,
         modifier = modifier.width(width.dp),
+        enabled = enabled,
         shape = RoundedCornerShape(5.dp),
         colors = ButtonDefaults.buttonColors(
         containerColor = Color.Blue

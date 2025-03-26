@@ -36,4 +36,6 @@
     <string name="register_et_lastname">Lastname</string>
     <string name="register_birthdate">Birthdate</string>
     <string name="player_not_found">Player not found</string>
+    <string name="goal_saved">The goal is saved</string>
+    <string name="enter_valid_time">Please enter a valid time</string>
 </resources>

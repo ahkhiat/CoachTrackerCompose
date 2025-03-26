@@ -11,6 +11,6 @@ data class PlayerDTO (
     val user : UserDTO,
 
     @Json(name = "plays_in")
-    val playsInTeam : PlayerDTO?
+    val playsInTeam : TeamDTO?
 
 ) : Parcelable
